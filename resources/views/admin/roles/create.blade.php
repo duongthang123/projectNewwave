@@ -24,7 +24,7 @@
                                 <div>
                                     @foreach ($permission as $item)
                                         <div class="form-check">
-                                            {!! Form::checkbox('permissions_id[]', $item->id, false, ['class' => 'form-check-input', 'id' => 'customCheck1_'.$item->id]) !!}
+                                            {!! Form::checkbox('permission_ids[]', $item->id, false, ['class' => 'form-check-input', 'id' => 'customCheck1_'.$item->id]) !!}
                                             {!! Form::label('customCheck1_'.$item->id, $item->name, ['class' => 'form-check-label']) !!}
                                         </div>
                                     @endforeach

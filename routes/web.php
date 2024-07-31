@@ -47,12 +47,6 @@ Route::group(['prefix' => 'roles', 'middleware' => 'auth'], function() {
     Route::DELETE('/{role}', [RoleController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'departments', 'middleware' => 'auth'], function() {
-    Route::get('/', [DepartmentController::class, 'index'])->name('departments.index');
-    Route::get('/create', [DepartmentController::class, 'create'])->name('departments.create');
-    Route::get('/{department}', [DepartmentController::class, 'show'])->name('departments.show');
-    Route::get('/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
-    Route::post('/department', [DepartmentController::class, 'store'])->name('departments.store');
-    Route::put('/{department}', [DepartmentController::class, 'update'])->name('departments.update');
-    Route::DELETE('/{department}', [DepartmentController::class, 'destroy']);
-});
+// Route::group(['prefix' => '', 'middleware' => 'auth'], function() {
+    Route::resource('departments', DepartmentController::class);
+// });

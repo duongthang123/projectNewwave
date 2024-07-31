@@ -58,8 +58,8 @@
           </ul>
         </li>
         {{-- Department --}}
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item {{request()->routeIs('departments.*') ? 'menu-open' : ''}}">
+          <a href="#" class="nav-link {{request()->routeIs('departments.*') ? 'active' : ''}}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               {{__('message.Department')}}
@@ -68,21 +68,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="./index.html" class="nav-link active">
+              <a href="{{ route('departments.index')}}" class="nav-link {{request()->routeIs('departments.index') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Dashboard v1</p>
+                <p>{{__('message.List')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="./index2.html" class="nav-link">
+              <a href="{{ route('departments.create')}}" class="nav-link {{request()->routeIs('departments.create') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Dashboard v2</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="./index3.html" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Dashboard v3</p>
+                <p>{{__('message.Create')}}</p>
               </a>
             </li>
           </ul>
