@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +35,24 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // Admin
 
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dasboard')->middleware('auth');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+
+Route::group(['prefix' => 'roles', 'middleware' => 'auth'], function() {
+    Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::get('/{role}', [RoleController::class, 'show'])->name('roles.show');
+    Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
+    Route::put('/{role}', [RoleController::class, 'update'])->name('roles.update');
+    Route::DELETE('/{role}', [RoleController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'departments', 'middleware' => 'auth'], function() {
+    Route::get('/', [DepartmentController::class, 'index'])->name('departments.index');
+    Route::get('/create', [DepartmentController::class, 'create'])->name('departments.create');
+    Route::get('/{department}', [DepartmentController::class, 'show'])->name('departments.show');
+    Route::get('/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+    Route::post('/department', [DepartmentController::class, 'store'])->name('departments.store');
+    Route::put('/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+    Route::DELETE('/{department}', [DepartmentController::class, 'destroy']);
+});
