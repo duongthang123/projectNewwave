@@ -23,5 +23,9 @@ return [
     'Delete role successfully!' => 'Delete role successfully!',
     'Delete role failed!' => 'Delete role failed!',
     'Permission' => 'Permission',
+    'Department List' => 'Department List',
+    'Department Name' => 'Department Name',
+    'Department Description' => 'Department Description',
+
     'Logout' => 'Logout',
 ];

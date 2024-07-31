@@ -23,5 +23,9 @@ return [
     'Delete role successfully!' => 'Xóa vai trò thành công!',
     'Delete role failed!' => 'Xóa vai trò thất bại!',
     'Permission' => 'Quyền',
+    'Department List' => 'Danh sách khoa',
+    'Department Name' => 'Tên khoa',
+    'Department Description' => 'Mô tả khoa',
+
     'Logout' => 'Đăng xuất',
 ];

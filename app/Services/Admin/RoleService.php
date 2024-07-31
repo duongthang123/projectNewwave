@@ -28,11 +28,11 @@ class RoleService
     public function createRole($request)
     {
         $data = $request->all();
-        $data['gouard_name'] = 'web';
+        $data['guard_name'] = 'web';
 
-        if($request->has('permissions_id')) {
+        if($request->has('permission_ids')) {
             $role = $this->roleRepository->create($data);
-            $role->permissions()->attach($data['permissions_id']);
+            $role->permissions()->attach($data['permission_ids']);
         } else {
             $role = $this->roleRepository->create($data);
         }
@@ -43,16 +43,11 @@ class RoleService
         $role = $this->roleRepository->findRoleById($id);
         $dataUpdate = $request->all();
         $role->update($dataUpdate);
-        $role->permissions()->sync($dataUpdate['permissions_id'] ?? []);
+        $role->permissions()->sync($dataUpdate['permission_ids'] ?? []);
     }
 
     public function destroy($id)
     {
-        $role = $this->roleRepository->findRoleById($id);
-        if($role)
-        {
-            return $this->roleRepository->delete($role);
-        }
-        return false;
+        return $this->roleRepository->findRoleById($id)->delete();
     }
 }

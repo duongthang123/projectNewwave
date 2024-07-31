@@ -8,9 +8,9 @@
             <div>
                 <div class="form-group">
                     {!! Form::label('role_name', __('message.Role Name')) !!}
-                    {!! Form::text('name', old('name') ?? $role->name, ['class' => 'form-control', 'id' => 'role_name', 'placeholder' => 'Nhập tên vai trò']) !!}
+                    {!! Form::text('name', $role->name, ['class' => 'form-control', 'id' => 'role_name', 'placeholder' => 'Nhập tên vai trò']) !!}
                     @error('name')
-                    <span class="text-danger">{{$message}}</span>
+                    <span class="text-danger">{{ $message}}</span>
                     @enderror
                 </div>
 
@@ -24,7 +24,7 @@
                                 <div>
                                     @foreach ($permission as $item)
                                         <div class="form-check">
-                                            {!! Form::checkbox('permissions_id[]', $item->id, $role->permissions->contains('name', $item->name), ['class' => 'form-check-input', 'id' => 'customCheck1_'.$item->id]) !!}
+                                            {!! Form::checkbox('permission_ids[]', $item->id, $role->permissions->contains('name', $item->name), ['class' => 'form-check-input', 'id' => 'customCheck1_'.$item->id]) !!}
                                             {!! Form::label('customCheck1_'.$item->id, $item->name, ['class' => 'form-check-label']) !!}
                                         </div>
                                     @endforeach

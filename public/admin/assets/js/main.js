@@ -18,7 +18,6 @@ document.getElementById('confirm-delete').addEventListener('click', function() {
 })
 
 function removeUrl(url) {
-    console.log(url);
     $.ajax({
         type: 'DELETE',
         url: url,

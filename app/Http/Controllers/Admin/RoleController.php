@@ -7,8 +7,6 @@ use App\Http\Requests\Roles\CreateRoleRequest;
 use App\Http\Requests\Roles\UpdateRoleRequest;
 use App\Models\Permission;
 use App\Services\Admin\RoleService;
-use Illuminate\Http\Request;
-use Spatie\LaravelIgnition\Http\Requests\UpdateConfigRequest;
 
 class RoleController extends Controller
 {
