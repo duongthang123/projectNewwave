@@ -24,18 +24,19 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item menu-open">
-          <a href="#" class="nav-link active">
+        {{-- Dashboard --}}
+        <li class="nav-item">
+          <a href="{{ route('dashboard')}}" class="nav-link {{request()->routeIs('dashboard') ? 'active' : ''}}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               {{__('message.Dashboard')}}
-              <i class="right fas fa-angle-left"></i>
             </p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
+        {{-- Role --}}
+        <li class="nav-item {{request()->routeIs('roles.*') ? 'menu-open' : ''}}">
+          <a href="#" class="nav-link {{request()->routeIs('roles.*') ? 'active' : ''}}">
+            <i class="nav-icon fas fa-user-tag"></i>
             <p>
               {{__('message.Role')}}
               <i class="right fas fa-angle-left"></i>
@@ -43,19 +44,20 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="./index.html" class="nav-link active">
+              <a href="{{ route('roles.index')}}" class="nav-link {{request()->routeIs('roles.index') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Dashboard v1</p>
+                <p>{{__('message.List')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="./index2.html" class="nav-link">
+              <a href="{{ route('roles.create')}}" class="nav-link {{request()->routeIs('roles.create') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Dashboard v2</p>
+                <p>{{__('message.Create')}}</p>
               </a>
             </li>
           </ul>
         </li>
+        {{-- Department --}}
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -85,12 +87,13 @@
             </li>
           </ul>
         </li>
+        {{-- Logout --}}
         <li class="nav-item">
           <a href="{{route('logout')}}" onclick="event.preventDefault();
                                                document.getElementById('logout-form').submit();" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
-                  Logout
+                  {{__('message.Logout')}}
               </p>
               <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                   @csrf
