@@ -65,7 +65,7 @@ class DepartmentController extends Controller
 
         toastr()->success(__('Update department failed!'));
         return redirect()->back();
-        
+
     }
 
     /**
