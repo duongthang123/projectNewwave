@@ -81,6 +81,30 @@
             </li>
           </ul>
         </li>
+        {{-- Subject --}}
+        <li class="nav-item {{request()->routeIs('subjects.*') ? 'menu-open' : ''}}">
+          <a href="#" class="nav-link {{request()->routeIs('subjects.*') ? 'active' : ''}}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Subject
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('subjects.index')}}" class="nav-link {{request()->routeIs('subjects.index') ? 'active' : ''}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{__('message.List')}}</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('subjects.create')}}" class="nav-link {{request()->routeIs('subjects.create') ? 'active' : ''}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{__('message.Create')}}</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         {{-- Logout --}}
         <li class="nav-item">
           <a href="{{route('logout')}}" onclick="event.preventDefault();
