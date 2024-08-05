@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Student extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -20,4 +23,38 @@ class Student extends Model
         'birthday',
         'department_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($student) {
+            if ($student->avatar) {
+                Storage::delete('public/uploads/users/' . $student->avatar);
+            }
+        });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class)->withPivot('score');
+    }
+
+    public function subjectCount() 
+    {
+        return $this->subjects()->count();
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if($this->avatar) {
+            return asset('storage/uploads/users/' . $this->avatar);
+        }
+        return asset('storage/uploads/users/default-user.jpg');
+    }
 }

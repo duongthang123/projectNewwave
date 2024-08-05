@@ -36,7 +36,7 @@
                         data-url="subjects/{{ $subject->id }}">
                         {{__('message.Delete')}}
                     </button>
-                    @include('admin.layouts.confirmDelete')
+                    @include('admin.layouts.confirm-delete')
                 @else
                     {!! Form::submit(__('message.Create'), ['class' => 'btn btn-primary']) !!}
                 @endif
