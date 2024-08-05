@@ -37,6 +37,6 @@
         </table>
         {{ $subjects->appends(request()->only('key'))->links() }}
     </div>
-    @include('admin.layouts.confirmDelete')
+    @include('admin.layouts.confirm-delete')
 @endsection
 

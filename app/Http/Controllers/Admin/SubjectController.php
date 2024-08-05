@@ -73,14 +73,14 @@ class SubjectController extends Controller
      */
     public function destroy(string $id)
     {
-        $result = $this->subjectRepo->delete($id);
+        $result = $this->subjectRepo->deleteSubject($id);
         if($result) {
             toastr()->success('Delete subject successfully!');
             return response()->json([
                 'error' => false
             ]);
         }
-        toastr()->success('Delete subject failed!');
+        
         return response()->json([
             'error' => true
         ]);

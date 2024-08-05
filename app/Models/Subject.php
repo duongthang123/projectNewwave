@@ -13,4 +13,9 @@ class Subject extends Model
         'name',
         'description',
     ];
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)->withPivot('score');
+    }
 }

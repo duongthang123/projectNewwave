@@ -31,5 +31,5 @@
             </div>
         {!! Form::close() !!}
     </div>
-    @include('admin.layouts.confirmDelete')
+    @include('admin.layouts.confirm-delete')
 @endsection

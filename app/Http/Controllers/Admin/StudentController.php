@@ -1,0 +1,180 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Helpers\UploadHelper;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Students\CreateStudentRequest;
+use App\Http\Requests\Students\UpdateScoreStudentRequest;
+use App\Http\Requests\Students\UpdateStudentRequest;
+use App\Repositories\Department\DepartmentRepository;
+use App\Repositories\Student\StudentRepository;
+use App\Repositories\User\UserRepository;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class StudentController extends Controller
+{
+    protected $studentRepo;
+    protected $departmentRepo;
+    protected $userRepo;
+
+    public function __construct(StudentRepository $studentRepo, DepartmentRepository $departmentRepo, UserRepository $userRepo)
+    {
+        $this->studentRepo = $studentRepo;
+        $this->departmentRepo = $departmentRepo;
+        $this->userRepo = $userRepo;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $students = $this->studentRepo->fillter($request->all());
+        return view('admin.students.index', compact('students'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $departments = $this->departmentRepo->getDepartmentPluck();
+        return view('admin.students.create', compact('departments'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(CreateStudentRequest $request)
+    {
+        $data = $request->all();
+        try {
+            DB::beginTransaction();
+
+            $user = $this->userRepo->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password'],)
+            ]);
+
+            $data['user_id'] = $user->id;
+            $data['student_code'] = date('Y') . $user->id;
+            $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : '';
+            
+            $this->studentRepo->create($data);
+            if($request->hasFile('avatar')){
+                UploadHelper::uploadFile($request);
+            }
+            DB::commit();
+
+            toastr()->success('Create student successfully!');
+            return redirect()->route('students.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            toastr()->error('Create student failed!');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $student = $this->studentRepo->getStudentByIdWithUser($id);
+        $departments = $this->departmentRepo->getDepartmentPluck();
+        return view('admin.students.show', compact('student', 'departments'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $student = $this->studentRepo->getStudentByIdWithUser($id);
+        $studentThumb = $student->avatar_url;
+        $departments = $this->departmentRepo->getAll();
+        if($student) {
+            return response()->json([
+                'error' => false,
+                'student' => $student,
+                'studentThumb' => $studentThumb,
+                'departments' => $departments
+            ]);
+        }
+
+        return response()->json([
+            'error' => false
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateStudentRequest $request, string $id)
+    {
+        $result = $this->studentRepo->updateStudent($request, $id);
+        if($result) {
+            toastr()->success('Update student successfully!');
+            return response()->json([
+                'error' => false,
+            ]);
+        }
+        return response()->json([
+            'error' => true,
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $result = $this->studentRepo->deleteStudent($id);
+        if($result) {
+            toastr()->success('Delete student successfully!');
+            return response()->json([
+                'error' => false
+            ]);
+        }
+        toastr()->error('Delete student failed!');
+        return response()->json([
+            'error' => true
+        ]);
+    }
+
+    /**
+     * get student transcripts by student_id
+     */
+    public function getStudentTranscriptById(string $id)
+    {
+        $student = $this->studentRepo->getStudentWithUserAndSubjectById($id);
+        $avgScore = $student->subjects->avg('pivot.score');
+        return view('admin.transcripts.student-result', compact('student', 'avgScore'));
+    }
+
+    /**
+     * update subject score by student_id
+     */
+    public function updateScoreSubjectByStudentId(UpdateScoreStudentRequest $request, string $id)
+    {
+        $student = $this->studentRepo->find($id);
+
+        foreach($request->scores as $subjectId => $score) {
+            $student->subjects()->updateExistingPivot($subjectId, ['score' => $score]);
+        }
+        
+        toastr()->success('Update score successfully!');
+        return response()->json([
+            'error' => false,
+        ]);
+    }
+
+    public function showFormRegiterSubject()
+    {
+        return view('admin.students.register-subject');
+    }
+}
