@@ -129,6 +129,36 @@
             </li>
           </ul>
         </li>
+        {{-- Student Profile --}}
+        <li class="nav-item {{request()->routeIs('students.*') ? 'menu-open' : ''}}">
+          <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              Student Home
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('students.profile')}}" class="nav-link {{request()->routeIs('students.profile') ? 'active' : ''}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Profile</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('students.register-subjects', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.register-subjects') ? 'active' : ''}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Register Subjects</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('students.student-result', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.student-result') ? 'active' : ''}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Study Result</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         {{-- Logout --}}
         <li class="nav-item">
           <a href="{{route('logout')}}" onclick="event.preventDefault();
