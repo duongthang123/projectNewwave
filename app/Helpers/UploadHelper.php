@@ -29,8 +29,6 @@ class UploadHelper
                 return '<span class="btn btn-secondary btn-xs">Stopped</span>';
             case config('const.STUDENT_STATUS.EXPELLED'):
                 return '<span class="btn btn-danger btn-xs">Expelled</span>';
-            case config('const.STUDENT_STATUS.PENDING'):
-                return '<span class="btn btn-light btn-xs">Pending</span>';
             default:
                 return '';
         }
