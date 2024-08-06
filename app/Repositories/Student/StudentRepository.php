@@ -135,5 +135,37 @@ class StudentRepository extends BaseRepository
     {
         return $this->model::with('user', 'subjects')->findOrFail($id);
     }
+
+    public function updateScoreSubjectByStudentId($scores, $id)
+    {
+        $student = $this->find($id);
+        foreach($scores as $subjectId => $score) {
+            $student->subjects()->updateExistingPivot($subjectId, ['score' => $score]);
+        }
+
+    }
+
+    public function registerSubjectsUpdate($subjectIds, $id)
+    {
+        $student = $this->find($id);
+        $student->subjects()->attach($subjectIds);
+    }
+
+    public function updateProfileStudent($request, $user)
+    {
+        try {
+            DB::beginTransaction();
+            $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : $user->student->avatar;
+            $this->update($data, $user->student->id);
+            if($request->hasFile('avatar')){
+                UploadHelper::uploadFile($request);
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+    }
 }
 

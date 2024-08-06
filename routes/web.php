@@ -49,11 +49,16 @@ Route::group(['prefix' => 'roles', 'middleware' => 'auth'], function() {
     Route::DELETE('/{role}', [RoleController::class, 'destroy']);
 });
 
-// Route::group(['prefix' => '', 'middleware' => 'auth'], function() {
-    Route::resource('departments', DepartmentController::class)->middleware('auth');
-    Route::resource('subjects', SubjectController::class)->middleware('auth');
-    Route::resource('students', StudentController::class)->middleware('auth');
-// });
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource('departments', DepartmentController::class);
+    Route::resource('subjects', SubjectController::class);
 
     Route::get('students/transcripts/{student}', [StudentController::class, 'getStudentTranscriptById'])->name('students.student-result');
     Route::put('students/transcripts/{student}', [StudentController::class, 'updateScoreSubjectByStudentId'])->name('students.update-student-result');
+    Route::get('students/subjects/register/{student}', [StudentController::class, 'registerSubjects'])->name('students.register-subjects');
+    Route::put('students/subjects/register/{student}', [StudentController::class, 'registerSubjectsUpdate'])->name('students.register-subjects-update');
+    Route::get('students/profile', [StudentController::class, 'profileStudent'])->name('students.profile');
+    Route::put('students/profile', [StudentController::class, 'updateProfileStudent'])->name('students.update-profile');
+    
+    Route::resource('students', StudentController::class);
+});

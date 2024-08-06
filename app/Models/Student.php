@@ -42,9 +42,14 @@ class Student extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)->withPivot('score');
+        return $this->belongsToMany(Subject::class)->withPivot('score')->withTimestamps();
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+    
     public function subjectCount() 
     {
         return $this->subjects()->count();

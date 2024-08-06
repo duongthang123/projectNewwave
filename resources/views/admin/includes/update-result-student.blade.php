@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             {!! Form::open([
-                'id' => 'form-update-result-student'
+                'id' => 'form-update-result-student-'.$subject->id.''
             ]) !!}
                 <div class="modal-header">
                     <h5 class="modal-title">{{ $subject->name }}</h5>
@@ -14,11 +14,11 @@
                     {!! Form::label('score', 'Score') !!}
                     {!! Form::number('scores['.$subject->id.']', $subject->pivot->score, ['class' => 'form-control', 'id' => 'score', 'placeholder' => 'Enter score...', 'min' => '0', 'max' => '10']) !!}
 
-                    <span id="result_error_score" class="text-danger"></span>
+                    <span id="result_error_score_{{ $subject->id }}" class="text-danger"></span>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="event.preventDefault();updateResultStudent(`{{ route('students.update-student-result', $student->id)}}`)" class="btn btn-primary">Update</button>
+                    <button type="button" onclick="event.preventDefault();updateResultStudent(`{{ route('students.update-student-result', $student->id)}}`,{{ $subject->id }})" class="btn btn-primary">Update</button>
                 </div>
             {!! Form::close() !!}
         </div>

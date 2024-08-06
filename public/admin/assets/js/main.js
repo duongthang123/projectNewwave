@@ -216,9 +216,9 @@ function updateStudent(id)
     })
 }
 
-function updateResultStudent(url) 
+function updateResultStudent(url, subjectId) 
 {
-    var formData = new FormData($('#form-update-result-student')[0]);
+    var formData = new FormData($(`#form-update-result-student-${subjectId}`)[0]);
     formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
     formData.append('_method', 'PUT');
 
@@ -238,7 +238,7 @@ function updateResultStudent(url)
         error: function(error) {
             if(error.status = 422) {
                 var errors = error.responseJSON;
-                errors.message ? $('#result_error_score').text(errors.message) : '';
+                errors.message ? $(`#result_error_score_${subjectId}`).text(errors.message) : '';
             }
         }
     });

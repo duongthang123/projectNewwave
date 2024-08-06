@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\UploadHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Students\CreateStudentRequest;
+use App\Http\Requests\Students\RegisterSubjectStudentRequest;
+use App\Http\Requests\Students\UpdateProfileStudentRequest;
 use App\Http\Requests\Students\UpdateScoreStudentRequest;
 use App\Http\Requests\Students\UpdateStudentRequest;
 use App\Repositories\Department\DepartmentRepository;
 use App\Repositories\Student\StudentRepository;
+use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,12 +22,18 @@ class StudentController extends Controller
     protected $studentRepo;
     protected $departmentRepo;
     protected $userRepo;
+    protected $subjectRepo;
 
-    public function __construct(StudentRepository $studentRepo, DepartmentRepository $departmentRepo, UserRepository $userRepo)
-    {
+    public function __construct (
+        StudentRepository $studentRepo, 
+        DepartmentRepository $departmentRepo, 
+        UserRepository $userRepo,
+        SubjectRepository $subjectRepo
+    ){
         $this->studentRepo = $studentRepo;
         $this->departmentRepo = $departmentRepo;
         $this->userRepo = $userRepo;
+        $this->subjectRepo = $subjectRepo;
     }
 
     /**
@@ -161,20 +170,53 @@ class StudentController extends Controller
      */
     public function updateScoreSubjectByStudentId(UpdateScoreStudentRequest $request, string $id)
     {
-        $student = $this->studentRepo->find($id);
-
-        foreach($request->scores as $subjectId => $score) {
-            $student->subjects()->updateExistingPivot($subjectId, ['score' => $score]);
-        }
-        
+        $this->studentRepo->updateScoreSubjectByStudentId($request->scores, $id);
         toastr()->success('Update score successfully!');
         return response()->json([
             'error' => false,
         ]);
     }
 
-    public function showFormRegiterSubject()
+    /**
+     * show form register subjects for students
+     */
+    public function registerSubjects(Request $request, string $id)
     {
-        return view('admin.students.register-subject');
+        $student = $this->studentRepo->getStudentWithUserAndSubjectById($id);
+        $subjectStudent = $student->subjects->pluck('id')->toArray();
+        $subjects = $this->subjectRepo->getAll($request->per_page);
+        return view('admin.students.register-subject', compact('student', 'subjectStudent' , 'subjects'));
+    }
+
+    /**
+     *   register subjects for students
+     */
+    public function registerSubjectsUpdate(RegisterSubjectStudentRequest $request, string $id)
+    {
+        $this->studentRepo->registerSubjectsUpdate($request->subject_ids, $id);
+        toastr()->success('Register subjects successfully!');
+        return redirect()->route('students.register-subjects', $id);
+    }
+
+    /**
+     * student profile
+     */
+    public function profileStudent()
+    {
+        $user = auth()->user();
+        return view('admin.students.profile', compact('user'));
+    }
+
+    /**
+     * update student profile
+     */
+    public function updateProfileStudent(UpdateProfileStudentRequest $request)
+    {
+        $result = $this->studentRepo->updateProfileStudent($request, auth()->user());
+        if($result) {
+            toastr()->success('Update profile successfully!');
+            return redirect()->route('students.profile');
+        }
+        return redirect()->back();
     }
 }

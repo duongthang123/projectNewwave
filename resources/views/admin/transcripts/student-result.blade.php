@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-4">
                 <div class="mb-2">
-                    <a href="{{ route('subjects.create') }}" class="btn btn-primary">
+                    <a href="{{ route('students.register-subjects', $student->id) }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         Resgister Subject
                     </a>
@@ -73,7 +73,7 @@
                             @include('admin.includes.update-muti-result-student')
                         </td>
                 @endforeach
-
+                        
             </tbody>
         </table>
     </div>
