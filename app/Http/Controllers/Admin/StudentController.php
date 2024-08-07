@@ -9,6 +9,7 @@ use App\Http\Requests\Students\RegisterSubjectStudentRequest;
 use App\Http\Requests\Students\UpdateProfileStudentRequest;
 use App\Http\Requests\Students\UpdateScoreStudentRequest;
 use App\Http\Requests\Students\UpdateStudentRequest;
+use App\Jobs\SendAccountStudentMail;
 use App\Repositories\Department\DepartmentRepository;
 use App\Repositories\Student\StudentRepository;
 use App\Repositories\Subject\SubjectRepository;
@@ -63,11 +64,7 @@ class StudentController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $this->userRepo->create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password'],)
-            ]);
+            $user = $this->userRepo->create($data);
 
             $data['user_id'] = $user->id;
             $data['student_code'] = date('Y') . $user->id;
@@ -77,6 +74,7 @@ class StudentController extends Controller
             if($request->hasFile('avatar')){
                 UploadHelper::uploadFile($request);
             }
+            SendAccountStudentMail::dispatch($data);
             DB::commit();
 
             toastr()->success('Create student successfully!');

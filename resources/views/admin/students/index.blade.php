@@ -5,6 +5,10 @@
         <h1>Student List</h1>
         <div class="mb-2">
             <a href="{{ route('students.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
+            <a href="" class="btn btn-secondary">
+                <i class="fas fa-upload mr-2"></i>
+                Import Score
+            </a>
         </div>
 
         {{ Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'mb-4']) }}

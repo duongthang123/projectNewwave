@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Departments\CreateDepartmentRequest;
 use App\Http\Requests\Departments\UpdateDepartmentRequest;
 use App\Repositories\Department\DepartmentRepository;
+use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
@@ -19,9 +20,9 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departments = $this->departmentRepo->getAll();
+        $departments = $this->departmentRepo->getAll($request->per_page);
         return view('admin.departments.index', compact('departments'));
     }
 
