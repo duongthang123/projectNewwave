@@ -20,9 +20,9 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $subjects = $this->subjectRepo->getAll();
+        $subjects = $this->subjectRepo->getAll($request->per_page);
         return view('admin.subjects.index', compact('subjects'));
     }
 

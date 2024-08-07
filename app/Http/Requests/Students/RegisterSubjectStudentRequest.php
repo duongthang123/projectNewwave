@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Students;
 
+use App\Models\Student;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,7 +32,8 @@ class RegisterSubjectStudentRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $subjectIds = $this->input('subject_ids', []);
-            
+            $studentId = $this->route('student');
+
             foreach ($subjectIds as $key => $subjectId) {
                 $subjectValidator = Validator::make(
                     ['subject_id' => $subjectId],
@@ -39,6 +41,20 @@ class RegisterSubjectStudentRequest extends FormRequest
                         'subject_id' => 'required|exists:subjects,id',
                     ]
                 );
+
+                if ($subjectValidator->fails()) {
+                    foreach ($subjectValidator->errors()->all() as $message) {
+                        $validator->errors()->add("subject_ids.$subjectId", $message);
+                    }
+                    toastr()->error('Register subject errors');
+                }
+
+                $student = Student::find($studentId);
+                if ($student->subjects->contains($subjectId)) {
+                    $validator->errors()->add("subject_ids.$key", 'You have already registered for this subject.');
+                    toastr()->error('You have already registered for one or more subjects.');
+                    return;
+                }
             }
         });
     }

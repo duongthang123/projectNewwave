@@ -34,4 +34,5 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('admin/dist/js/pages/dashboard.js')}}"></script>
 <script src="{{ asset('admin/assets/js/main.js')}}"></script>
+<script src="{{ asset('admin/assets/js/checkbox-subject.js')}}"></script>
 @yield('script')

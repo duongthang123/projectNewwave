@@ -35,7 +35,18 @@
 
             </tbody>
         </table>
-        {{ $departments->appends(request()->only('key'))->links() }}
+        {{ $departments->appends(request()->query())->links() }}
+        {{ Form::open(['route' => ['departments.index'], 'method' => 'GET', 'class' => 'mb-4']) }}
+            <div class="row mt-4">
+                <div class="col-md-1 ml-0">
+                    {{ Form::select('per_page', config('const.PER_PAGE') , request('per_page'), 
+                    [
+                        'class' => 'form-control',
+                        'onchange' => 'this.form.submit()'
+                    ]) }}
+                </div>
+            </div>
+        {{ Form::close() }}
     </div>
     @include('admin.layouts.confirm-delete')
 @endsection

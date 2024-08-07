@@ -3,7 +3,7 @@
 @section('title', 'Add Student')
 @section('content')
     <div class="card-body">
-        <h1>Add Student</h1>
+        <h1></h1>
             <div>
                 <div class="row mb-2">
                     <div class="col-md-12 d-flex align-items-center">
