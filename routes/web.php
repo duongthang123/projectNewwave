@@ -59,6 +59,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::put('students/subjects/register/{student}', [StudentController::class, 'registerSubjectsUpdate'])->name('students.register-subjects-update');
     Route::get('students/profile', [StudentController::class, 'profileStudent'])->name('students.profile');
     Route::put('students/profile', [StudentController::class, 'updateProfileStudent'])->name('students.update-profile');
-    
+    Route::post('students/import-scores', [StudentController::class, 'importScores'])->name('students.import-scores');
     Route::resource('students', StudentController::class);
 });
