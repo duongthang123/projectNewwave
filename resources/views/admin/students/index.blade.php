@@ -1,14 +1,14 @@
 @extends('admin.layouts.index')
 
 @section('content')
-    <div class="card-body">
+    <div class="card-body table-responsive">
         <h1>Student List</h1>
-        <div class="mb-2">
+        <div class="row mb-2">
             <a href="{{ route('students.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
-            <a href="" class="btn btn-secondary">
+            <button class="btn btn-secondary ml-auto" data-toggle="modal" data-target="#modal-import-scores">
                 <i class="fas fa-upload mr-2"></i>
                 Import Score
-            </a>
+            </button>
         </div>
 
         {{ Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'mb-4']) }}
@@ -100,4 +100,5 @@
     </div>
     @include('admin.layouts.confirm-delete')
     @include('admin.students.edit')
+    @include('admin.includes.modal-import-scores')
 @endsection

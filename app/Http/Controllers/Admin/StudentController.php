@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\UploadHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Students\CreateStudentRequest;
+use App\Http\Requests\Students\ImportScoreStudentRequest;
 use App\Http\Requests\Students\RegisterSubjectStudentRequest;
 use App\Http\Requests\Students\UpdateProfileStudentRequest;
 use App\Http\Requests\Students\UpdateScoreStudentRequest;
 use App\Http\Requests\Students\UpdateStudentRequest;
+use App\Imports\ScoresImport;
 use App\Jobs\SendAccountStudentMail;
 use App\Repositories\Department\DepartmentRepository;
 use App\Repositories\Student\StudentRepository;
@@ -17,6 +19,8 @@ use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class StudentController extends Controller
 {
@@ -216,5 +220,23 @@ class StudentController extends Controller
             return redirect()->route('students.profile');
         }
         return redirect()->back();
+    }
+
+    /**
+     * import scores for students by excel file
+     */
+    public function importScores(ImportScoreStudentRequest $request)
+    {
+        try {
+            Excel::import(new ScoresImport, $request->file);
+            toastr()->success('Import scores for students successfully');
+            return redirect()->route('students.index');
+        } catch (ValidationException $e) {
+            toastr()->error($e->getMessage());
+            return redirect()->route('students.index');
+        } catch (\Exception $e) {
+            toastr()->error($e->getMessage());
+            return redirect()->route('students.index');
+        }
     }
 }
