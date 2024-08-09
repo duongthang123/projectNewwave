@@ -9,7 +9,7 @@
     </p>
     <p>Avg Score: {{ $avgScore }}</p>
     <p>
-        Therefore, the school will make a decision to force student Thang to leave school!
+        Therefore, the school will make a decision to force student {{ $name }} to leave school!
     </p>
     <p>If you have any questions, please contact this email!</p>
 </body>
