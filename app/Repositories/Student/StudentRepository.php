@@ -3,6 +3,7 @@
 namespace App\Repositories\Student;
 
 use App\Helpers\UploadHelper;
+use App\Jobs\SendAccountStudentMail;
 use App\Models\Student;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepository;
@@ -27,8 +28,6 @@ class StudentRepository extends BaseRepository
 
     public function fillter($request)
     {
-        $perPage = config('const.PER_PAGE.10');
-
         $students = $this->model::with('user');
 
         if(isset($request['age_from'])) {
@@ -74,9 +73,7 @@ class StudentRepository extends BaseRepository
             $students->where('status', $request['status']);
         }
 
-        if(isset($request['per_page'])) {
-            $perPage = $request['per_page'];
-        }
+        $perPage = isset($request['per_page']) ? $request['per_page'] : config('const.PER_PAGE.10');
 
         return $students->latest('id')->paginate($perPage);
     }
@@ -84,6 +81,35 @@ class StudentRepository extends BaseRepository
     public function getStudentByIdWithUser($id)
     {
         return $this->model::with('user')->findOrFail($id);
+    }
+
+    public function createStudent($request)
+    {
+        $data = $request->all();
+        try {
+            DB::beginTransaction();
+
+            $user = $this->userRepo->create($data);
+            $user->assignRole('student');
+            $data['user_id'] = $user->id;
+            $data['student_code'] = date('Y') . $user->id;
+            $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : '';
+            
+            $this->create($data);
+            if($request->hasFile('avatar')){
+                $result = UploadHelper::uploadFile($request);
+                dd($result);
+            }
+            SendAccountStudentMail::dispatch($data);
+            DB::commit();
+
+            toastr()->success('Create student successfully!');
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            toastr()->error('Create student failed!', $e->getMessage());
+            return false;
+        }
     }
 
     public function updateStudent($request, $id)
@@ -104,7 +130,7 @@ class StudentRepository extends BaseRepository
                     'email' => $student->user->email
                 ];
                 if($request->password) {
-                    $userData['password'] = Hash::make($request->password);
+                    $userData['password'] = $request->password;
                 }
         
                 if($request->hasFile('avatar')){
@@ -142,7 +168,6 @@ class StudentRepository extends BaseRepository
         foreach($scores as $subjectId => $score) {
             $student->subjects()->updateExistingPivot($subjectId, ['score' => $score]);
         }
-
     }
 
     public function registerSubjectsUpdate($subjectIds, $id)

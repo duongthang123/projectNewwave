@@ -3,9 +3,11 @@
 @section('content')
     <div class="card-body">
         <h1>{{ __('message.Department List') }}</h1>
-        <div class="mb-2">
-            <a href="{{ route('departments.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
-        </div>
+        @can('create-department')
+            <div class="mb-2">
+                <a href="{{ route('departments.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
+            </div>
+        @endcan
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -23,13 +25,17 @@
                         <td> {{ $department->name }} </td>
                         <td> {{ $department->description }} </td>
                         <td>
-                            <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-danger delete-button" data-toggle="modal" data-target="#modal-default"
-                                data-url="departments/{{ $department->id }}">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            @can('update-department')
+                                <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            @endcan
+                            @can('delete-department')
+                                <button type="button" class="btn btn-sm btn-danger delete-button" data-toggle="modal" data-target="#modal-default"
+                                    data-url="departments/{{ $department->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            @endcan
                         </td>
                 @endforeach
 

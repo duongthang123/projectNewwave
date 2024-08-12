@@ -64,30 +64,11 @@ class StudentController extends Controller
      */
     public function store(CreateStudentRequest $request)
     {
-        $data = $request->all();
-        try {
-            DB::beginTransaction();
-
-            $user = $this->userRepo->create($data);
-
-            $data['user_id'] = $user->id;
-            $data['student_code'] = date('Y') . $user->id;
-            $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : '';
-            
-            $this->studentRepo->create($data);
-            if($request->hasFile('avatar')){
-                UploadHelper::uploadFile($request);
-            }
-            SendAccountStudentMail::dispatch($data);
-            DB::commit();
-
-            toastr()->success('Create student successfully!');
+        $result = $this->studentRepo->createStudent($request);
+        if($result) {
             return redirect()->route('students.index');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            toastr()->error('Create student failed!');
-            return redirect()->back();
         }
+        return redirect()->back();
     }
 
     /**
@@ -95,6 +76,7 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
+
         $student = $this->studentRepo->getStudentByIdWithUser($id);
         $departments = $this->departmentRepo->getDepartmentPluck();
         return view('admin.students.show', compact('student', 'departments'));
@@ -168,7 +150,7 @@ class StudentController extends Controller
     }
 
     /**
-     * update subject score by student_id
+     * update subject score by student_id UpdateScoreStudentRequest
      */
     public function updateScoreSubjectByStudentId(UpdateScoreStudentRequest $request, string $id)
     {
@@ -177,6 +159,13 @@ class StudentController extends Controller
         return response()->json([
             'error' => false,
         ]);
+    }
+
+    public function updateScoreByStudentId(UpdateScoreStudentRequest $request, string $id)
+    {
+        $this->studentRepo->updateScoreSubjectByStudentId($request->scores, $id);
+        toastr()->success('Update score successfully!');
+        return redirect()->route('students.student-result', $id);
     }
 
     /**
@@ -238,5 +227,14 @@ class StudentController extends Controller
             toastr()->error($e->getMessage());
             return redirect()->route('students.index');
         }
+    }
+
+    /**
+     *  edit scores for students
+     */
+    public function editScores(string $id)
+    {
+        $student = $this->studentRepo->getStudentWithUserAndSubjectById($id);
+        return view('admin.students.edit-scores', compact('student'));
     }
 }

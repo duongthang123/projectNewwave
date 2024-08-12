@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('change-language/{lang}', function($lang){
@@ -32,33 +32,55 @@ Route::get('change-language/{lang}', function($lang){
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// With role: admin | student
+Route::group(['middleware' => ['role:admin|student', 'auth']], function() {
+    Route::group(['prefix' => 'departments'], function() {
+        Route::get('/', [DepartmentController::class, 'index'])->name('departments.index')->middleware('permission:show-department');
+        Route::get('create', [DepartmentController::class, 'create'])->name('departments.create')->middleware('permission:create-department');
+        Route::get('{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit')->middleware('permission:update-department');
+        Route::post('department', [DepartmentController::class, 'store'])->name('departments.store')->middleware('permission:create-department');
+        Route::put('{department}', [DepartmentController::class, 'update'])->name('departments.update')->middleware('permission:update-department');
+        Route::delete('{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy')->middleware('permission:delete-department');
+    });
 
+    Route::group(['prefix' => 'subjects'], function() {
+        Route::get('/', [SubjectController::class, 'index'])->name('subjects.index')->middleware('permission:show-subject');
+        Route::get('/create', [SubjectController::class, 'create'])->name('subjects.create')->middleware('permission:create-subject');
+        Route::get('/{subject}/edit', [SubjectController::class, 'edit'])->name('subjects.edit')->middleware('permission:update-subject');
+        Route::post('/subject', [SubjectController::class, 'store'])->name('subjects.store')->middleware('permission:create-subject');
+        Route::put('/{subject}', [SubjectController::class, 'update'])->name('subjects.update')->middleware('permission:update-subject');
+        Route::delete('/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy')->middleware('permission:delete-subject');
+    });
 
-// Admin
-
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
-
-Route::group(['prefix' => 'roles', 'middleware' => 'auth'], function() {
-    Route::get('/', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
-    Route::get('/{role}', [RoleController::class, 'show'])->name('roles.show');
-    Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
-    Route::put('/{role}', [RoleController::class, 'update'])->name('roles.update');
-    Route::DELETE('/{role}', [RoleController::class, 'destroy']);
+    Route::get('students/transcripts/{student}', [StudentController::class, 'getStudentTranscriptById'])->name('students.student-result')->middleware('permission:show-student-result');
+    Route::get('students/subjects/register/{student}', [StudentController::class, 'registerSubjects'])->name('students.register-subjects')->middleware('permission:register-subject');
+    Route::put('students/subjects/register/{student}', [StudentController::class, 'registerSubjectsUpdate'])->name('students.register-subjects-update')->middleware('permission:register-subject');
 });
 
-Route::group(['middleware' => 'auth'], function() {
-    Route::resource('departments', DepartmentController::class);
-    Route::resource('subjects', SubjectController::class);
-
-    Route::get('students/transcripts/{student}', [StudentController::class, 'getStudentTranscriptById'])->name('students.student-result');
-    Route::put('students/transcripts/{student}', [StudentController::class, 'updateScoreSubjectByStudentId'])->name('students.update-student-result');
-    Route::get('students/subjects/register/{student}', [StudentController::class, 'registerSubjects'])->name('students.register-subjects');
-    Route::put('students/subjects/register/{student}', [StudentController::class, 'registerSubjectsUpdate'])->name('students.register-subjects-update');
+// With role: student
+Route::group(['middleware' => ['role:student', 'auth']], function () {
     Route::get('students/profile', [StudentController::class, 'profileStudent'])->name('students.profile');
     Route::put('students/profile', [StudentController::class, 'updateProfileStudent'])->name('students.update-profile');
+});
+
+// With role: admin
+Route::group(['middleware' => ['role:admin', 'auth']], function () {
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+    Route::group(['prefix' => 'roles'], function() {
+        Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::get('/{role}', [RoleController::class, 'show'])->name('roles.show');
+        Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
+        Route::put('/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    });
+
+    Route::put('students/transcripts/{student}', [StudentController::class, 'updateScoreSubjectByStudentId'])->name('students.update-student-result');
     Route::post('students/import-scores', [StudentController::class, 'importScores'])->name('students.import-scores');
+    Route::get('students/edit-scores/{student}', [StudentController::class, 'editScores'])->name('students.edit-scores');
+    Route::put('students/edit-scores/{student}', [StudentController::class, 'updateScoreByStudentId'])->name('students.update-student-scores');
+
     Route::resource('students', StudentController::class);
 });
