@@ -35,5 +35,4 @@
 <script src="{{ asset('admin/dist/js/pages/dashboard.js')}}"></script>
 <script src="{{ asset('admin/assets/js/main.js')}}"></script>
 <script src="{{ asset('admin/assets/js/checkbox-subject.js')}}"></script>
-<script src="{{ asset('admin/assets/js/update-score.js')}}"></script>
 @yield('script')
