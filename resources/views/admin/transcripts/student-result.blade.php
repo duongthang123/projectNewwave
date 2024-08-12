@@ -17,10 +17,12 @@
             </div>
             <div class="col-md-4">
                 <div class="mb-2">
-                    <a href="{{ route('students.register-subjects', $student->id) }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i>
-                        Resgister Subject
-                    </a>
+                    @can('register-subject')
+                        <a href="{{ route('students.register-subjects', $student->id) }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Resgister Subject
+                        </a>
+                    @endcan
                 </div>
                 <div class="mt-4">
                     <p class="text-danger" style="font-size: 20px">
@@ -31,18 +33,31 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-6 mr-2">
-            <div class="ml-auto">
-                <a href="{{ route('subjects.create') }}" 
-                class="btn btn-warning" id="update-result-btn" style="display: none;max-width: 140px"
-                    data-toggle="modal" data-target="#modal-update-muti-result-student"
-                >
-                    <i class="fas fa-edit"></i>
-                    Update result
-                </a>
+        @hasrole('admin')
+            <div class="row mt-6 mr-2">
+                <div class="ml-auto">
+                    <a class="btn btn-warning" id="update-result-btn" style="display: none;max-width: 140px"
+                        data-toggle="modal" data-target="#modal-update-muti-result-student"
+                    >
+                        <i class="fas fa-edit"></i>
+                        Update result
+                    </a>
+                </div>
             </div>
-        </div>
+        @endhasrole
         
+        @hasrole('admin')
+            <div class="row mt-6 mr-2">
+                <div class="ml-auto">
+                    <a href="{{ route('students.edit-scores', $student->id) }}" class="btn btn-primary"
+                    >
+                        <i class="fas fa-edit"></i>
+                        Update result
+                    </a>
+                </div>
+            </div>
+        @endhasrole
+
         <table class="table table-hover table-bordered mt-4">
             <thead>
                 <tr>
@@ -58,19 +73,22 @@
                 @foreach ($student->subjects as $subject)
                     <tr>
                         <td>
-                            <input type="checkbox" class="subject-checkbox" value="{{ $subject->id }}"
-                                data-score="{{ $subject->pivot->score }}" data-name="{{ $subject->name}}"
-                            >
+                            @hasrole('admin')
+                                <input type="checkbox" class="subject-checkbox" value="{{ $subject->id }}"
+                                    data-score="{{ $subject->pivot->score }}" data-name="{{ $subject->name}}">
+                            @endhasrole
                         </td>
                         <td> {{ $subject->id }} </td>
                         <td> {{ $subject->name }} </td>
                         <td> {{ $subject->pivot->score }} </td>
                         <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-update-result-student-{{$subject->id}}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            @include('admin.includes.update-result-student')
-                            @include('admin.includes.update-muti-result-student')
+                            @hasrole('admin')
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-update-result-student-{{$subject->id}}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                @include('admin.includes.update-result-student')
+                                @include('admin.includes.update-muti-result-student')
+                            @endhasrole
                         </td>
                 @endforeach
                         

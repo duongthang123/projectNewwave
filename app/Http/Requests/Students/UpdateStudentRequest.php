@@ -25,7 +25,7 @@ class UpdateStudentRequest extends FormRequest
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
             'name' => 'required|string|max:255', 
             'department_id' => 'required|exists:departments,id',
-            'phone' => 'required|max:15|unique:students,phone,'  . $this->student,
+            'phone' => 'required|max:15|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/|unique:students,phone,'  . $this->student,
             'birthday' => 'required|date', 
             'gender' => 'required|in:0,1', 
             'address' => 'nullable|string|max:255', 

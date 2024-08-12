@@ -24,140 +24,150 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        {{-- Dashboard --}}
-        <li class="nav-item">
-          <a href="{{ route('dashboard')}}" class="nav-link {{request()->routeIs('dashboard') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>
-              {{__('message.Dashboard')}}
-            </p>
-          </a>
-        </li>
-        {{-- Role --}}
-        <li class="nav-item {{request()->routeIs('roles.*') ? 'menu-open' : ''}}">
-          <a href="#" class="nav-link {{request()->routeIs('roles.*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-user-tag"></i>
-            <p>
-              {{__('message.Role')}}
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
+        @hasrole('admin')
+            {{-- Dashboard --}}
             <li class="nav-item">
-              <a href="{{ route('roles.index')}}" class="nav-link {{request()->routeIs('roles.index') ? 'active' : ''}}">
+                <a href="{{ route('dashboard')}}" class="nav-link {{request()->routeIs('dashboard') ? 'active' : ''}}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    {{__('message.Dashboard')}}
+                </p>
+                </a>
+            </li>
+            {{-- Role --}}
+            <li class="nav-item {{request()->routeIs('roles.*') ? 'menu-open' : ''}}">
+                <a href="#" class="nav-link {{request()->routeIs('roles.*') ? 'active' : ''}}">
+                <i class="nav-icon fas fa-user-tag"></i>
+                <p>
+                    {{__('message.Role')}}
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('roles.index')}}" class="nav-link {{request()->routeIs('roles.index') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>{{__('message.List')}}</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('roles.create')}}" class="nav-link {{request()->routeIs('roles.create') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>{{__('message.Create')}}</p>
+                    </a>
+                </li>
+                </ul>
+            </li>
+            {{-- Student --}}
+        <li class="nav-item {{request()->routeIs('students.*') ? 'menu-open' : ''}}">
+            <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+                Student
+                <i class="right fas fa-angle-left"></i>
+            </p>
+            </a>
+            <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{ route('students.index')}}" class="nav-link {{request()->routeIs('students.index') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{__('message.List')}}</p>
-              </a>
+                </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('roles.create')}}" class="nav-link {{request()->routeIs('roles.create') ? 'active' : ''}}">
+                <a href="{{ route('students.create')}}" class="nav-link {{request()->routeIs('students.create') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{__('message.Create')}}</p>
-              </a>
+                </a>
             </li>
-          </ul>
+            </ul>
         </li>
+        @endhasrole
+        
+        {{-- Student Profile --}}
+        @hasrole('student')
+            <li class="nav-item {{request()->routeIs('students.*') ? 'menu-open' : ''}}">
+                <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
+                <i class="nav-icon fas fa-user"></i>
+                <p>
+                    Student Home
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('students.profile')}}" class="nav-link {{request()->routeIs('students.profile') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Profile</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('students.register-subjects', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.register-subjects') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Register Subjects</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('students.student-result', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.student-result') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Study Result</p>
+                    </a>
+                </li>
+                </ul>
+            </li>
+        @endhasrole
+        
         {{-- Department --}}
         <li class="nav-item {{request()->routeIs('departments.*') ? 'menu-open' : ''}}">
-          <a href="#" class="nav-link {{request()->routeIs('departments.*') ? 'active' : ''}}">
+            <a href="#" class="nav-link {{request()->routeIs('departments.*') ? 'active' : ''}}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-              {{__('message.Department')}}
-              <i class="right fas fa-angle-left"></i>
+                {{__('message.Department')}}
+                <i class="right fas fa-angle-left"></i>
             </p>
-          </a>
-          <ul class="nav nav-treeview">
+            </a>
+            <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ route('departments.index')}}" class="nav-link {{request()->routeIs('departments.index') ? 'active' : ''}}">
+                <a href="{{ route('departments.index')}}" class="nav-link {{request()->routeIs('departments.index') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{__('message.List')}}</p>
-              </a>
+                </a>
             </li>
-            <li class="nav-item">
-              <a href="{{ route('departments.create')}}" class="nav-link {{request()->routeIs('departments.create') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>{{__('message.Create')}}</p>
-              </a>
-            </li>
-          </ul>
+            @can('create-department')
+                <li class="nav-item">
+                    <a href="{{ route('departments.create')}}" class="nav-link {{request()->routeIs('departments.create') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>{{__('message.Create')}}</p>
+                    </a>
+                </li>
+            @endcan
+            </ul>
         </li>
         {{-- Subject --}}
         <li class="nav-item {{request()->routeIs('subjects.*') ? 'menu-open' : ''}}">
-          <a href="#" class="nav-link {{request()->routeIs('subjects.*') ? 'active' : ''}}">
+            <a href="#" class="nav-link {{request()->routeIs('subjects.*') ? 'active' : ''}}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-              Subject
-              <i class="right fas fa-angle-left"></i>
+                Subject
+                <i class="right fas fa-angle-left"></i>
             </p>
-          </a>
-          <ul class="nav nav-treeview">
+            </a>
+            <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ route('subjects.index')}}" class="nav-link {{request()->routeIs('subjects.index') ? 'active' : ''}}">
+                <a href="{{ route('subjects.index')}}" class="nav-link {{request()->routeIs('subjects.index') ? 'active' : ''}}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{__('message.List')}}</p>
-              </a>
+                </a>
             </li>
-            <li class="nav-item">
-              <a href="{{ route('subjects.create')}}" class="nav-link {{request()->routeIs('subjects.create') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>{{__('message.Create')}}</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        {{-- Student --}}
-        <li class="nav-item {{request()->routeIs('students.*') ? 'menu-open' : ''}}">
-          <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-user"></i>
-            <p>
-              Student
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="{{ route('students.index')}}" class="nav-link {{request()->routeIs('students.index') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>{{__('message.List')}}</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('students.create')}}" class="nav-link {{request()->routeIs('students.create') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>{{__('message.Create')}}</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        {{-- Student Profile --}}
-        <li class="nav-item {{request()->routeIs('students.*') ? 'menu-open' : ''}}">
-          <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-user"></i>
-            <p>
-              Student Home
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="{{ route('students.profile')}}" class="nav-link {{request()->routeIs('students.profile') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Profile</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('students.register-subjects', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.register-subjects') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Register Subjects</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('students.student-result', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.student-result') ? 'active' : ''}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Study Result</p>
-              </a>
-            </li>
-          </ul>
+            @can('create-subject')
+                <li class="nav-item">
+                    <a href="{{ route('subjects.create')}}" class="nav-link {{request()->routeIs('subjects.create') ? 'active' : ''}}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>{{__('message.Create')}}</p>
+                    </a>
+                </li>
+            @endcan
+            </ul>
         </li>
         {{-- Logout --}}
         <li class="nav-item">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    // protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -36,5 +37,17 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $userRoles = $user->roles()->pluck('name')->toArray();
+        if (in_array('admin', $userRoles)) {
+            return redirect()->route('dashboard');
+        } elseif (in_array('student', $userRoles) && count($userRoles) === 1) {
+            return redirect()->route('students.profile');
+        } else {
+            abort(403, 'User does not have the right roles.');
+        }
     }
 }

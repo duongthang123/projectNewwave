@@ -48,6 +48,11 @@ class RoleDatabaseSeeder extends Seeder
             ['name' => 'update-subject', 'group' => 'Subject'],
             ['name' => 'show-subject',   'group' => 'Subject'],
             ['name' => 'delete-subject', 'group' => 'Subject'],
+            ['name' => 'register-subject', 'group' => 'Subject'],
+
+            ['name' => 'show-student-result', 'group' => 'StudentResult'],
+
+        
         ];
         
         foreach($permissions as $permission) {

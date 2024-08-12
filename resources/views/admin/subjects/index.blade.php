@@ -3,19 +3,23 @@
 @section('content')
     <div class="card-body">
         <h1>Subject List</h1>
-        <div class="mb-2">
-            <a href="{{ route('subjects.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
-        </div>
-        <div class="row mt-6 mr-2">
-            <div class="ml-auto">
-                <a class="btn btn-warning" id="update-register-subject-btn" style="display: none;max-width: 140px"
-                    data-toggle="modal" data-target="#modal-update-multi-register-subjects"
-                >
-                    <i class="fas fa-plus"></i>
-                    Resgister All
-                </a>
+        @can('create-subject')
+            <div class="mb-2">
+                <a href="{{ route('subjects.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
             </div>
-        </div>
+        @endcan
+        @can('register-subject')
+            <div class="row mt-6 mr-2">
+                <div class="ml-auto">
+                    <a class="btn btn-warning" id="update-register-subject-btn" style="display: none;max-width: 140px"
+                        data-toggle="modal" data-target="#modal-update-multi-register-subjects"
+                    >
+                        <i class="fas fa-plus"></i>
+                        Resgister All
+                    </a>
+                </div>
+            </div>
+        @endcan
         <table class="table table-hover table-bordered mt-2">
             <thead>
                 <tr>
@@ -31,47 +35,56 @@
             <tbody>
                 @foreach ($subjects as $subject)
                     <tr>
-                        {{-- @can('register-subject') --}}
                         <td>
-                            @if (Auth::user()->student)
-                                @php 
-                                    $student = Auth::user()->student;
-                                    $subjectStudent = $student->subjects->pluck('id')->toArray();
-                                @endphp
-                                @if (!in_array($subject->id, $subjectStudent))
-                                    <input type="checkbox" class="register-subject-checkbox" value="{{ $subject->id }}"
-                                        data-name="{{ $subject->name }}">
+                            @can('register-subject')
+                                @if (Auth::user()->student)
+                                    @php 
+                                        $student = Auth::user()->student;
+                                        $subjectStudent = $student->subjects->pluck('id')->toArray();
+                                    @endphp
+                                    @if (!in_array($subject->id, $subjectStudent))
+                                        <input type="checkbox" class="register-subject-checkbox" value="{{ $subject->id }}"
+                                            data-name="{{ $subject->name }}">
+                                    @endif
                                 @endif
-                            @endif
+                            @endcan
                         </td>
-                        {{-- @endcan --}}
                         <td> {{ $subject->id }} </td>
                         <td> {{ $subject->name }} </td>
                         <td> {{ $subject->description }} </td>
                         <td>
-                            <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-danger delete-button" data-toggle="modal" data-target="#modal-default"
-                                data-url="subjects/{{ $subject->id }}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                        <td class="text-center">
-                            @if (Auth::user()->student)
-                                @php 
-                                    $student = Auth::user()->student;
-                                    $subjectStudent = $student->subjects->pluck('id')->toArray();
-                                @endphp
-                                @if (!in_array($subject->id, $subjectStudent))
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-update-register-subjects-{{$subject->id}}">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    @include('admin.includes.update-register-subjects')
-                                    @include('admin.includes.update-multi-register-subjects')
-                                @endif
+                            @can('update-subject')
+                                <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            @endcan
                             
-                            @endif
+                            @can('delete-subject')
+                                <button type="button" class="btn btn-sm btn-danger delete-button" data-toggle="modal" data-target="#modal-default"
+                                    data-url="subjects/{{ $subject->id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            @endcan
+                            
+                        </td>
+                        
+                        <td class="text-center">
+                            @can('register-subject')
+                                @if (Auth::user()->student)
+                                    @php 
+                                        $student = Auth::user()->student;
+                                        $subjectStudent = $student->subjects->pluck('id')->toArray();
+                                    @endphp
+                                    @if (!in_array($subject->id, $subjectStudent))
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-update-register-subjects-{{$subject->id}}">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        @include('admin.includes.update-register-subjects')
+                                        @include('admin.includes.update-multi-register-subjects')
+                                    @endif
+                                
+                                @endif
+                            @endcan
                         </td>
                 @endforeach
 

@@ -43,6 +43,7 @@ class UpdateScoreStudentRequest extends FormRequest
 
                 if ($subjectValidator->fails()) {
                     foreach ($subjectValidator->errors()->all() as $message) {
+                        toastr()->error($message . 'Update score failed!');
                         $validator->errors()->add("scores.$subjectId", $message);
                     }
                 }
