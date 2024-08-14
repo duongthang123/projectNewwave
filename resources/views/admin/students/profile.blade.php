@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
+@section('title', __('message.My Profile'))
 
-@section('title', 'Add Student')
 @section('content')
     <div class="card-body">
         <h1></h1>
@@ -11,8 +11,8 @@
                         <div class="ml-3">
                             <h3 style="font-weight: 600"> {{ $user->name }}</h3>
                             <div class="d-flex">
-                                <p class="mb-0 mr-3"><b>Student_code:</b> {{ $user->student->student_code }}</p>
-                                <p class="mb-0 mr-3"><b>Department:</b>  {{ $user->student->department->name }}</p>
+                                <p class="mb-0 mr-3"><b>{{ __('message.Student Code') }}:</b> {{ $user->student->student_code }}</p>
+                                <p class="mb-0 mr-3"><b>{{ __('message.Department') }}:</b>  {{ $user->student->department->name }}</p>
                             </div>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
                 {!! Form::open(['route' => 'students.update-profile', 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                     <div class="row mt-4 mb-4 d-flex align-items-center">
                         <div class="col-md-1">
-                            {!! Form::label('image-input', 'Image: ' )!!}
+                            {!! Form::label('image-input', __('message.Image') )!!}
                         </div>
                         <div class="col-md-3">
                             {!! Form::file('avatar', ['class' => 'form-control', 'id' => 'image-input', 'accept' => 'image/*']) !!}
@@ -29,7 +29,7 @@
                             @enderror
                         </div>
                         <div class="col-md-2">
-                            {!! Form::submit('Update Image', ['class' => 'btn btn-primary']) !!}
+                            {!! Form::submit(__('message.Update') . ' ' . __('message.Image'), ['class' => 'btn btn-primary']) !!}
                         </div>
                         
                         <div class="col-md-6">
@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('student_phone', 'Phone' )!!}
+                            {!! Form::label('student_phone', __('message.Phone') )!!}
                             {!! Form::text('phone', $user->student->phone, ['class' => 'form-control', 'id' => 'student_phone', 'placeholder' => 'Enter student phone...', 'disabled' => true]) !!}
                             @error('phone')
                             <span class="text-danger">{{$message}}</span>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('student_email', 'Email' )!!}
+                            {!! Form::label('student_email', __('message.Email') )!!}
                             {!! Form::email('email', $user->email, ['class' => 'form-control', 'id' => 'student_email', 'placeholder' => 'Enter student email...', 'disabled' => true]) !!}
                             @error('email')
                             <span class="text-danger">{{$message}}</span>
@@ -63,14 +63,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('student_birthday', 'Birthday' )!!}
+                            {!! Form::label('student_birthday', __('message.Birthday') )!!}
                             {!! Form::date('birthday', $user->student->birthday, ['class' => 'form-control', 'id' => 'student_birthday', 'disabled' => true]) !!}
     
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('student_gender', 'Gender' )!!}
+                            {!! Form::label('student_gender', __('message.Gender') )!!}
                             {!! Form::select('gender', [0 => 'Male', 1 => 'Female'], $user->student->gender, ['class' => 'form-control', 'id' => 'student_gender', 'disabled' => true]) !!}
                     
                         </div>
@@ -80,14 +80,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('student_address', 'Address' )!!}
+                            {!! Form::label('student_address', __('message.Address') )!!}
                             {!! Form::text('address', $user->student->address, ['class' => 'form-control', 'id' => 'student_address', 'disabled' => true]) !!}                            
                            
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group mt-2">
-                            {!! Form::label('student_status', 'Status') !!}
+                            {!! Form::label('student_status', __('message.Status')) !!}
                             <div class="d-flex">
                                 {!! \App\Helpers\UploadHelper::studenStatus($user->student->status) !!}
                             </div>

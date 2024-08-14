@@ -1,14 +1,13 @@
 @extends('admin.layouts.index')
-
-@section('title', 'Update Department')
+@section('title', __('message.Update Department'))
 
 @section('content')
     <div class="card-body">
-        <h1>Edit Department</h1>
+        <h1>{{ __('message.Edit Department') }}</h1>
         {!! Form::open(['route' => ['departments.update', $department->id], 'method' => 'PUT']) !!}
             <div>
                 <div class="form-group">
-                    {!! Form::label('department_name', 'Department Name') !!}
+                    {!! Form::label('department_name', __('message.Department Name')) !!}
                     {!! Form::text('name', $department->name, ['class' => 'form-control', 'id' => 'department_name', 'placeholder' => 'Enter department name...']) !!}
                     @error('name')
                     <span class="text-danger">{{$message}}</span>

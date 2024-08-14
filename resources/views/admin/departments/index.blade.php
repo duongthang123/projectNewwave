@@ -1,4 +1,5 @@
 @extends('admin.layouts.index')
+@section('title', __('message.Manager Department'))
 
 @section('content')
     <div class="card-body">

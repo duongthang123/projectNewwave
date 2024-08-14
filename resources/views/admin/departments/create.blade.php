@@ -1,9 +1,9 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Thêm Khoa')
+@section('title', __('message.Add Department'))
 @section('content')
     <div class="card-body">
-        <h1>{{__('message.Add'). " " .__('message.Department')}}</h1>
+        <h1>{{ __('message.Add Department') }}</h1>
         {!! Form::open(['route' => 'departments.store', 'method' => 'POST']) !!}
             <div>
                 <div class="form-group">

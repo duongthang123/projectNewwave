@@ -1,9 +1,9 @@
 @extends('admin.layouts.index')
+@section('title', __('message.Create Subject'))
 
-@section('title', 'Create Subject')
 @section('content')
     <div class="card-body">
-        <h1>{{ isset($subject) ? 'Update Subject' : 'Create Subject'}}</h1>
+        <h1>{{ isset($subject) ? __('message.Update Subject') : __('message.Create Subject')}}</h1>
         @if (isset($subject))
             {!! Form::model($subject, [
                 'route' => ['subjects.update', $subject->id],
@@ -17,14 +17,14 @@
         @endif
             <div>
                 <div class="form-group">
-                    {!! Form::label('subject_name', 'Subject Name') !!}
+                    {!! Form::label('subject_name', __('message.Subject Name')) !!}
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'subject_name', 'placeholder' => 'Enter subject name...']) !!}
                     @error('name')
                     <span class="text-danger">{{$message}}</span>
                     @enderror
                 </div>
                 <div class="form-group">
-                    {!! Form::label('subject_description', 'Subject Description') !!}
+                    {!! Form::label('subject_description', __('message.Description')) !!}
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 4, 'id' => 'subject_description']) !!}
                 </div>
             </div>
