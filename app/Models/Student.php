@@ -49,11 +49,6 @@ class Student extends Model
     {
         return $this->belongsTo(Department::class);
     }
-    
-    public function subjectCount() 
-    {
-        return $this->subjects()->count();
-    }
 
     public function getAvatarUrlAttribute()
     {

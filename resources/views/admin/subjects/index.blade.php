@@ -1,8 +1,9 @@
 @extends('admin.layouts.index')
+@section('title', __('message.Manager Subject'))
 
 @section('content')
     <div class="card-body">
-        <h1>Subject List</h1>
+        <h1>{{ __('message.Subject List') }}</h1>
         @can('create-subject')
             <div class="mb-2">
                 <a href="{{ route('subjects.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
@@ -15,7 +16,7 @@
                         data-toggle="modal" data-target="#modal-update-multi-register-subjects"
                     >
                         <i class="fas fa-plus"></i>
-                        Resgister All
+                        {{ __('message.Register All') }}
                     </a>
                 </div>
             </div>
@@ -25,10 +26,10 @@
                 <tr>
                     <th style="width: 50px;"></th>
                     <th style="width: 50px;">ID</th>
-                    <th>Subject Name</th>
-                    <th>Subject Description</th>
+                    <th>{{ __('message.Subject Name') }}</th>
+                    <th>{{ __('message.Description') }}</th>
                     <th style="width: 100px">&nbsp;</th>
-                    <th style="width: 100px">Register</th>
+                    <th style="width: 100px">{{ __('message.Register') }}</th>
                 </tr>
             </thead>
 

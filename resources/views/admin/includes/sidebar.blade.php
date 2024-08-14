@@ -2,10 +2,10 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="#" class="img-circle elevation-2" alt="#">
+        <img src="{{ Auth::user()->student->avatar_url }}" class="img-circle elevation-2" alt="#">
       </div>
       <div class="info">
-        <a href="#" class="d-block">Alexander Pierce</a>
+        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
       </div>
     </div>
 
@@ -63,7 +63,7 @@
             <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
             <i class="nav-icon fas fa-user"></i>
             <p>
-                Student
+                {{__('message.Student')}}
                 <i class="right fas fa-angle-left"></i>
             </p>
             </a>
@@ -90,7 +90,7 @@
                 <a href="#" class="nav-link {{request()->routeIs('students.*') ? 'active' : ''}}">
                 <i class="nav-icon fas fa-user"></i>
                 <p>
-                    Student Home
+                    {{ __('message.Student Home')}}
                     <i class="right fas fa-angle-left"></i>
                 </p>
                 </a>
@@ -98,19 +98,19 @@
                 <li class="nav-item">
                     <a href="{{ route('students.profile')}}" class="nav-link {{request()->routeIs('students.profile') ? 'active' : ''}}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Profile</p>
+                    <p>{{ __('message.Profile')}} </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('students.register-subjects', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.register-subjects') ? 'active' : ''}}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Register Subjects</p>
+                    <p>{{ __('message.Register Subjects') }}</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('students.student-result', Auth::user()->student->id)}}" class="nav-link {{request()->routeIs('students.student-result') ? 'active' : ''}}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Study Result</p>
+                    <p>{{ __('message.Study Result')}} </p>
                     </a>
                 </li>
                 </ul>
@@ -148,7 +148,7 @@
             <a href="#" class="nav-link {{request()->routeIs('subjects.*') ? 'active' : ''}}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-                Subject
+                {{ __('message.Subject') }}
                 <i class="right fas fa-angle-left"></i>
             </p>
             </a>

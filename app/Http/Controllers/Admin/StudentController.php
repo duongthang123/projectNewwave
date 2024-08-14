@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\UploadHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Students\CreateStudentRequest;
 use App\Http\Requests\Students\ImportScoreStudentRequest;
@@ -11,14 +10,11 @@ use App\Http\Requests\Students\UpdateProfileStudentRequest;
 use App\Http\Requests\Students\UpdateScoreStudentRequest;
 use App\Http\Requests\Students\UpdateStudentRequest;
 use App\Imports\ScoresImport;
-use App\Jobs\SendAccountStudentMail;
 use App\Repositories\Department\DepartmentRepository;
 use App\Repositories\Student\StudentRepository;
 use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 

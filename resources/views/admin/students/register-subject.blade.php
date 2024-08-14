@@ -1,18 +1,18 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Register Subject')
+@section('title', __('message.Register Subjects'))
 @section('content')
     <div class="card-body">
-        <h1>Register Subjects</h1>
+        <h1>{{  __('message.Register Subjects') }}</h1>
         <div class="row mb-2">
             <div class="col-md-8 d-flex align-items-center">
                 <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 200px; border-radius: 5px" alt=""/>
                 <div class="ml-3">
                     <h4 style="font-weight: 600"> {{ $student->user->name }}</h4>
                     <div class="d-flex">
-                        <p class="mb-0 mr-3">Student Code: {{ $student->student_code }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Student Code')}}: {{ $student->student_code }}</p>
                         <p class="mb-0 mr-3">Email: {{ $student->user->email }}</p>
-                        <p class="mb-0 mr-3">Phone: {{ $student->phone }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Phone')}}: {{ $student->phone }}</p>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                     data-toggle="modal" data-target="#modal-update-multi-register-subjects"
                 >
                     <i class="fas fa-plus"></i>
-                    Resgister All
+                    {{ __('message.Register All') }}
                 </a>
             </div>
         </div>
@@ -35,9 +35,9 @@
                 <tr>
                     <th style="width: 50px;"></th>
                     <th style="width: 50px;">ID</th>
-                    <th >Subject Name</th>
-                    <th class="text-center">Status</th>
-                    <th style="width: 100px" class="text-center">Register</th>
+                    <th >{{ __('message.Subject Name') }}</th>
+                    <th class="text-center">{{ __('message.Status') }}</th>
+                    <th style="width: 100px" class="text-center">{{ __('message.Register') }}</th>
                 </tr>
             </thead>
 
@@ -54,8 +54,8 @@
                         <td> {{ $subject->id }} </td>
                         <td> {{ $subject->name }} </td>
                         <td class="text-center"> {!! in_array($subject->id, $subjectStudent) ? 
-                                '<button class="btn btn-sm btn-success" style="min-width: 96px;">Registered</button>' :
-                                 '<button class="btn btn-sm btn-secondary" style="min-width: 96px;">UnRegistered</button>' 
+                                '<button class="btn btn-sm btn-success" style="min-width: 96px;">'. __('message.Registered') .'</button>' :
+                                 '<button class="btn btn-sm btn-secondary" style="min-width: 96px;">'. __('message.UnRegistered') .'</button>' 
                              !!}  
                         </td>
                         <td class="text-center">

@@ -9,7 +9,6 @@ use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class StudentRepository extends BaseRepository
 {
@@ -28,8 +27,9 @@ class StudentRepository extends BaseRepository
 
     public function fillter($request)
     {
-        $students = $this->model::with('user');
-
+        $students = $this->model::select('id', 'user_id', 'student_code', 'status', 'gender', 'birthday')
+                                ->with('user:id,name,email', 'subjects:id');
+                                
         if(isset($request['age_from'])) {
             $ageFromDate = Carbon::now()->subYears($request['age_from'])->startOfDay()->format('Y-m-d');
             $students->where('birthday', '<=', $ageFromDate);
@@ -97,8 +97,7 @@ class StudentRepository extends BaseRepository
             
             $this->create($data);
             if($request->hasFile('avatar')){
-                $result = UploadHelper::uploadFile($request);
-                dd($result);
+                UploadHelper::uploadFile($request);
             }
             SendAccountStudentMail::dispatch($data);
             DB::commit();
@@ -107,7 +106,7 @@ class StudentRepository extends BaseRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            toastr()->error('Create student failed!', $e->getMessage());
+            toastr()->error('Create student failed!');
             return false;
         }
     }

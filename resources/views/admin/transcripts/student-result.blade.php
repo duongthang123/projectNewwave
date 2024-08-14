@@ -1,17 +1,18 @@
 @extends('admin.layouts.index')
+@section('title', __('message.Transcript'))
 
 @section('content')
     <div class="card-body">
-        <h1>Transcripts</h1>
+        <h1>{{ __('message.Transcript') }}</h1>
         <div class="row mb-2">
             <div class="col-md-8 d-flex align-items-center">
                 <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 200px; border-radius: 5px" alt=""/>
                 <div class="ml-3">
                     <h4 style="font-weight: 600"> {{ $student->user->name }}</h4>
                     <div class="d-flex">
-                        <p class="mb-0 mr-3">Student Code: {{ $student->student_code }}</p>
-                        <p class="mb-0 mr-3">Email: {{ $student->user->email }}</p>
-                        <p class="mb-0 mr-3">Phone: {{ $student->phone }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Student Code')}}: {{ $student->student_code }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Email')}}: {{ $student->user->email }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Phone')}}: {{ $student->phone }}</p>
                     </div>
                 </div>
             </div>
@@ -20,14 +21,14 @@
                     @can('register-subject')
                         <a href="{{ route('students.register-subjects', $student->id) }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i>
-                            Resgister Subject
+                            {{ __('message.Register Subjects') }}
                         </a>
                     @endcan
                 </div>
                 <div class="mt-4">
                     <p class="text-danger" style="font-size: 20px">
                         <b>
-                            Average Score: {{ number_format($avgScore, 2) }}
+                           {{ __('message.Average Score')}}: {{ number_format($avgScore, 2) }}
                         </b>
                     </p>
                 </div>
@@ -40,7 +41,7 @@
                         data-toggle="modal" data-target="#modal-update-muti-result-student"
                     >
                         <i class="fas fa-edit"></i>
-                        Update result
+                        {{ __('message.Update result') }}
                     </a>
                 </div>
             </div>
@@ -52,7 +53,7 @@
                     <a href="{{ route('students.edit-scores', $student->id) }}" class="btn btn-primary"
                     >
                         <i class="fas fa-edit"></i>
-                        Update result
+                        {{ __('message.Update result') }}
                     </a>
                 </div>
             </div>
@@ -63,8 +64,8 @@
                 <tr>
                     <th style="width: 50px;"></th>
                     <th style="width: 50px;">ID</th>
-                    <th>Subject Name</th>
-                    <th>Score</th>
+                    <th>{{ __('message.Subject Name') }}</th>
+                    <th>{{ __('message.Score')}}</th>
                     <th style="width: 100px">&nbsp;</th>
                 </tr>
             </thead>

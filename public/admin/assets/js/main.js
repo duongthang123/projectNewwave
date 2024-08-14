@@ -208,7 +208,7 @@ function updateStudent(id)
                 errors.name ? $('#student_error_name').text(errors.name[0]) : '';
                 errors.phone ? $('#student_error_phone').text(errors.phone[0]) : '';
                 errors.department ? $('#student_error_department').text(errors.department[0]) : '';
-                errors.birthday ? $('#student_error_name').text(errors.birthday[0]) : '';
+                errors.birthday ? $('#student_error_birthday').text(errors.birthday[0]) : '';
                 errors.gender ? $('#student_error_gender').text(errors.gender[0]) : '';
                 errors.password ? $('#student_error_password').text(errors.password[0]) : '';
             }

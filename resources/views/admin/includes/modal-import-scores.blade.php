@@ -7,7 +7,7 @@
                 'enctype' => 'multipart/form-data'
             ]) !!}
                 <div class="modal-header">
-                    <h5 class="modal-title w-100 text-center"> Choose file </h5>
+                    <h5 class="modal-title w-100 text-center"> {{ __('message.Chose File') }} </h5>
                     
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
@@ -17,8 +17,8 @@
                     <input type="file" name="file">
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('message.Close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('message.Upload') }}</button>
                 </div>
             {!! Form::close() !!}
         </div>

@@ -1,17 +1,18 @@
 @extends('admin.layouts.index')
+@section('title', __('message.Update Scores'))
 
 @section('content')
     <div class="card-body">
-        <h1>Update Scores</h1>
+        <h1>{{ __('message.Update Scores')}} </h1>
         <div class="row mb-2">
             <div class="col-md-8 d-flex align-items-center">
                 <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 200px; border-radius: 5px" alt=""/>
                 <div class="ml-3">
                     <h4 style="font-weight: 600"> {{ $student->user->name }}</h4>
                     <div class="d-flex">
-                        <p class="mb-0 mr-3">Student Code: {{ $student->student_code }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Student Code') }}: {{ $student->student_code }}</p>
                         <p class="mb-0 mr-3">Email: {{ $student->user->email }}</p>
-                        <p class="mb-0 mr-3">Phone: {{ $student->phone }}</p>
+                        <p class="mb-0 mr-3">{{ __('message.Phone')}}: {{ $student->phone }}</p>
                     </div>
                 </div>
             </div>
@@ -23,7 +24,7 @@
             <div class="ml-auto">
                 <button id="create-row-update-score" class="btn btn-primary">
                     <i class="fas fa-plus"></i>
-                    Create
+                    {{ __('message.Create')}}
                 </button>
             </div>
         </div>
@@ -34,8 +35,8 @@
             <table class="table table-hover table-bordered mt-4">
                 <thead>
                     <tr>
-                        <th>Subject Name</th>
-                        <th>Score</th>
+                        <th>{{ __('message.Subject Name') }} </th>
+                        <th>{{ __('message.Score') }} </th>
                         <th style="width: 100px">&nbsp;</th>
                     </tr>
                 </thead>
@@ -44,7 +45,7 @@
                 </tbody>
 
             </table>
-            <button id="btn-submit-update-score" type="submit" class="btn btn-primary">Submit</button>
+            <button id="btn-submit-update-score" type="submit" class="btn btn-primary">{{ __('message.Update') }}</button>
         </form>
     </div>
 @endsection
@@ -61,6 +62,7 @@
             function getSelectedValues() {
                 const selectedValues = [];
                 const selects = document.querySelectorAll('select');
+                
                 selects.forEach(select => {
                     if (select.value) {
                         selectedValues.push(select.value);
@@ -80,7 +82,7 @@
                     
                     subjects.forEach(subject => {
                         if (!selectedValues.includes(subject.id.toString()) || select.value === subject.id.toString()) {
-                            options += `<option value="${subject.id}" ${select.value === subject.id.toString() ? 'selected' : ''}>${subject.name}</option>`;
+                            options += `<option value="${subject.id}" data-score="${subject.pivot.score}" ${select.value === subject.id.toString() ? 'selected' : ''}>${subject.name}</option>`;
                         }
                     });
 
@@ -97,7 +99,7 @@
 
                 subjects.forEach(subject => {
                     if(!selectedValues.includes(subject.id.toString())) {
-                        options += `<option value="${subject.id}">${subject.name}</option>`;
+                        options += `<option value="${subject.id}" data-score="${subject.pivot.score}">${subject.name}</option>`;
                     }
                 })
                 newRow.innerHTML = `
@@ -127,7 +129,11 @@
 
                 selectElement.addEventListener('change', function() {
                     const selectedSubjectId = selectElement.value;
+                    const selectedOption = selectElement.options[selectElement.selectedIndex];
+                    const score = selectedOption.getAttribute('data-score');
+                    
                     inputElement.name = `scores[${selectedSubjectId}]`;
+                    inputElement.value = score;
                     updateOptions();
                 });
 

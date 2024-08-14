@@ -25,7 +25,12 @@ class CreateStudentRequest extends FormRequest
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
             'name' => 'required|string|max:255', 
             'department_id' => 'required|exists:departments,id',
-            'phone' => 'required|unique:students,phone|max:15|regex:/^[0-9\-\+]{9,15}$/', 
+            'phone' => [
+                'required',
+                'max:15',
+                'regex:/^(03|05|07|08|09)[0-9]{8}$/',
+                'unique:students,phone',
+            ],
             'email' => 'required|unique:users,email|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', 
             'birthday' => 'required|date', 
             'gender' => 'required|in:0,1', 
