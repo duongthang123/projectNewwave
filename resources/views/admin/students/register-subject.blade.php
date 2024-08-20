@@ -6,7 +6,7 @@
         <h1>{{  __('message.Register Subjects') }}</h1>
         <div class="row mb-2">
             <div class="col-md-8 d-flex align-items-center">
-                <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 200px; border-radius: 5px" alt=""/>
+                <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 100px;max-height: 100px; border-radius: 5px" alt=""/>
                 <div class="ml-3">
                     <h4 style="font-weight: 600"> {{ $student->user->name }}</h4>
                     <div class="d-flex">
@@ -33,7 +33,9 @@
         <table class="table table-hover table-bordered mt-4">
             <thead>
                 <tr>
-                    <th style="width: 50px;"></th>
+                    <th style="width: 50px;">
+                        <input type="checkbox" id="check-all-register-subject">
+                    </th>
                     <th style="width: 50px;">ID</th>
                     <th >{{ __('message.Subject Name') }}</th>
                     <th class="text-center">{{ __('message.Status') }}</th>
@@ -53,10 +55,11 @@
                         </td>
                         <td> {{ $subject->id }} </td>
                         <td> {{ $subject->name }} </td>
-                        <td class="text-center"> {!! in_array($subject->id, $subjectStudent) ? 
+                        <td class="text-center"> 
+                            {!! in_array($subject->id, $subjectStudent) ? 
                                 '<button class="btn btn-sm btn-success" style="min-width: 96px;">'. __('message.Registered') .'</button>' :
                                  '<button class="btn btn-sm btn-secondary" style="min-width: 96px;">'. __('message.UnRegistered') .'</button>' 
-                             !!}  
+                            !!}  
                         </td>
                         <td class="text-center">
                             @if (!in_array($subject->id, $subjectStudent))
@@ -86,4 +89,8 @@
         {{ Form::close() }}
     </div>
     
+@endsection
+
+@section('script')
+    <script src="{{ asset('admin/assets/js/checkbox-subject.js')}}"></script>
 @endsection

@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="card-body">
-        <h1>{{ __('message.Student List')}} </h1>
+        <h1> {{ __('message.Student List')}} </h1>
         <div class="row mb-2">
             <a href="{{ route('students.create') }}" class="btn btn-primary">{{__('message.Create')}}</a>
             <button class="btn btn-secondary ml-auto" data-toggle="modal" data-target="#modal-import-scores">
@@ -36,11 +36,11 @@
                 </div>
                 <div class="col-md-2">
                     {{ Form::label('phone_type', __('message.Phone Type')) }}
-                    {{ Form::select('phone_type', ['' => __('message.Select type phone')] + array_flip(config('const.PHONE_NUMBER_TYPE')), request('phone_type'), ['class' => 'form-control']) }}
+                    {{ Form::select('phone_types[]', ['' => __('message.Select type phone')] + array_flip(config('const.PHONE_NUMBER_TYPE')), request('phone_types'), ['multiple' => true ,'class' => 'form-control', ]) }}
                 </div>
                 <div class="col-md-2">
                     {{ Form::label('status', __('message.Status')) }}
-                    {{ Form::select('status', ['' => __('message.Select Status')] + array_flip(config('const.STUDENT_STATUS')), request('status'), ['class' => 'form-control']) }}
+                    {{ Form::select('status[]', ['' => __('message.Select Status')] + array_flip(config('const.STUDENT_STATUS')), request('status'), ['multiple' => true , 'class' => 'form-control']) }}
                 </div>
                 <div class="col-md-3 align-self-end">
                     {{ Form::submit(__('message.Search'), ['class' => 'btn btn-primary']) }}
@@ -55,7 +55,7 @@
                         <th style="width: 50px;">ID</th>
                         <th> {{ __('message.Student Code')}} </th>
                         <th> {{ __('message.Name')}} </th>
-                        <th> {{ __('message.Email')}} </th>
+                        <th> {{ __('message.Phone')}} </th>
                         <th> {{ __('message.Gender')}} </th>
                         <th> {{ __('message.Birthday')}} </th>
                         <th> {{ __('message.Status')}} </th>
@@ -63,14 +63,14 @@
                         <th style="width: 150px">&nbsp;</th>
                     </tr>
                 </thead>
-    
+
                 <tbody>
                     @foreach ($students as $student)
                         <tr>
                             <td> {{ $student->id }} </td>
                             <td> {{ $student->student_code }} </td>
                             <td> {{ $student->user->name }} </td>
-                            <td> {{ $student->user->email }} </td>
+                            <td> {{ $student->phone }} </td>
                             <td> {{ $student->gender === config('const.GENDER.Male') ? "Male" : 'Female' }} </td>
                             <td> {{ $student->birthday }} </td>
                             <td> {!! \App\Helpers\UploadHelper::studenStatus($student->status) !!} </td>
@@ -93,12 +93,12 @@
                                 </button>
                             </td>
                     @endforeach
-    
+
                 </tbody>
             </table>
             {{ $students->appends(request()->query())->links() }}
         </div>
-        
+
     </div>
     @include('admin.layouts.confirm-delete')
     @include('admin.students.edit')

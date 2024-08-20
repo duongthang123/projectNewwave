@@ -33,7 +33,7 @@
                         </div>
                         
                         <div class="col-md-6">
-                            <img src="" id="show-image" style="border-radius: 5px" width="200px" alt=""/>
+                            <img src="" id="show-image" style="border-radius: 5px" style="height: 150px;" width="150px" alt=""/>
                         </div>
                         
                     </div>

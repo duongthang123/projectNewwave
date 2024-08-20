@@ -1,28 +1,36 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const registerSubjectCheckboxs = document.querySelectorAll('.register-subject-checkbox');
-    const btnRegisterSubjectShow = document.getElementById('update-register-subject-btn');
+$(document).ready(function () {
+    const registerSubjectCheckboxs = $('.register-subject-checkbox');
+    const btnRegisterSubjectShow = $('#update-register-subject-btn');
+    const checkAll = $('#check-all-register-subject');
 
-    registerSubjectCheckboxs.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            const anyChecked = Array.from(registerSubjectCheckboxs).some(checkbox => checkbox.checked);
-            btnRegisterSubjectShow.style.display = anyChecked? 'block' : 'none';
+    console.log(registerSubjectCheckboxs);
+    if(registerSubjectCheckboxs.length == 0) {
+        checkAll.hide();
+    }
+    
+    checkAll.on('change', function () {
+        const isChecked = checkAll.prop('checked');
+        registerSubjectCheckboxs.prop('checked', isChecked);
+        btnRegisterSubjectShow.toggle(isChecked);
+    });
+
+    registerSubjectCheckboxs.on('change', function () {
+        const anyChecked = registerSubjectCheckboxs.is(':checked');
+        btnRegisterSubjectShow.toggle(anyChecked);
+        checkAll.prop('checked', registerSubjectCheckboxs.length === registerSubjectCheckboxs.filter(':checked').length);
+    });
+
+    btnRegisterSubjectShow.on('click', function () {
+        const bodyUpdateMultiSubject = $('#modal-body-register-multi-subjects');
+        bodyUpdateMultiSubject.empty();
+        registerSubjectCheckboxs.filter(':checked').each(function () {
+            const subjectName = $(this).data('name');
+            const subjectId = $(this).val();
+            const subjectInfo = `
+                <p class="text-center">${subjectId} - ${subjectName}</p>
+                <input type="hidden" name="subject_ids[${subjectId}]" value="${subjectId}">
+            `;
+            bodyUpdateMultiSubject.append(subjectInfo);
         });
     });
-    
-    btnRegisterSubjectShow.addEventListener('click', function (){
-        const bodyUpdateMultiSubject = document.getElementById('modal-body-register-multi-subjects');
-        bodyUpdateMultiSubject.innerHTML = '';
-        registerSubjectCheckboxs.forEach(checkbox => {
-            if (checkbox.checked) {
-                const subjectName = checkbox.getAttribute('data-name');
-                const subjectId = checkbox.value;
-                const subjectInfo = `
-                    <p class="text-center">${ subjectId } - ${ subjectName }</p>
-                    <input type="hidden" name="subject_ids[${subjectId}]" value="${subjectId}">
-                `;
-            
-                bodyUpdateMultiSubject.insertAdjacentHTML('beforeend', subjectInfo);
-            }
-        });
-    })
-})
+});

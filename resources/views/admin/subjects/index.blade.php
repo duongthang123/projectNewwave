@@ -24,7 +24,11 @@
         <table class="table table-hover table-bordered mt-2">
             <thead>
                 <tr>
-                    <th style="width: 50px;"></th>
+                    <th style="width: 50px;">
+                        @can('register-subject')
+                            <input type="checkbox" id="check-all-register-subject">
+                        @endcan
+                    </th>
                     <th style="width: 50px;">ID</th>
                     <th>{{ __('message.Subject Name') }}</th>
                     <th>{{ __('message.Description') }}</th>
@@ -105,4 +109,8 @@
         {{ Form::close() }}
     </div>
     @include('admin.layouts.confirm-delete')
+@endsection
+
+@section('script')
+    <script src="{{ asset('admin/assets/js/checkbox-subject.js')}}"></script>
 @endsection

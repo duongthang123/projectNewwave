@@ -27,8 +27,8 @@ class StudentRepository extends BaseRepository
 
     public function fillter($request)
     {
-        $students = $this->model::select('id', 'user_id', 'student_code', 'status', 'gender', 'birthday')
-                                ->with('user:id,name,email', 'subjects:id');
+        $students = $this->model::select('id', 'user_id', 'student_code', 'status', 'phone', 'gender', 'birthday')
+                                ->with('user:id,name', 'subjects:id');
                                 
         if(isset($request['age_from'])) {
             $ageFromDate = Carbon::now()->subYears($request['age_from'])->startOfDay()->format('Y-m-d');
@@ -54,23 +54,21 @@ class StudentRepository extends BaseRepository
             });
         }
 
-        if (isset($request['phone_type'])) {
-            switch($request['phone_type']) {
-                case config('const.PHONE_NUMBER_TYPE.VIETTEL'):
-                    $students->where('phone', 'regexp', '^(098|097|096)');
-                    break;
-                case config('const.PHONE_NUMBER_TYPE.MOBILEFONE'):
-                    $students->where('phone', 'regexp', '^(091|094)');
-                    break;
-                case config('const.PHONE_NUMBER_TYPE.VINAPHONE'):
-                    $students->where('phone', 'regexp', '^(090|093)');
-                    break;
-                default: break;
+        if (!empty($request['phone_types']) && array_filter($request['phone_types'])) {
+            $phonePrefixes = array_map(function($type) {
+                return config('const.PHONE_PREFIX.' . strtoupper($type));
+            }, array_filter($request['phone_types']));
+
+            if (!empty($phonePrefixes)) {
+                $students->where(function($query) use ($phonePrefixes) {
+                    $regexPattern = implode('|', $phonePrefixes);
+                    $query->where('phone', 'regexp', $regexPattern);
+                });
             }
         }
 
-        if(isset($request['status'])) {
-            $students->where('status', $request['status']);
+        if(!empty($request['status']) && array_filter($request['status'] , 'strlen')) {
+            $students->whereIn('status', array_filter($request['status'], 'strlen'));
         }
 
         $perPage = isset($request['per_page']) ? $request['per_page'] : config('const.PER_PAGE.10');
@@ -88,20 +86,20 @@ class StudentRepository extends BaseRepository
         $data = $request->all();
         try {
             DB::beginTransaction();
-
             $user = $this->userRepo->create($data);
             $user->assignRole('student');
             $data['user_id'] = $user->id;
             $data['student_code'] = date('Y') . $user->id;
-            $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : '';
             
-            $this->create($data);
             if($request->hasFile('avatar')){
-                UploadHelper::uploadFile($request);
+                $data['avatar'] = UploadHelper::uploadFile($request);
+            } else {
+                $data['avatar'] = null;
             }
+
+            $this->create($data);
             SendAccountStudentMail::dispatch($data);
             DB::commit();
-
             toastr()->success('Create student successfully!');
             return true;
         } catch (\Exception $e) {
@@ -118,24 +116,26 @@ class StudentRepository extends BaseRepository
         try {
             DB::beginTransaction();
             $student = $this->find($id);
-            if($student) {
+            if ($student) {
                 $data['user_id'] = $student->user_id;
                 $data['student_code'] = $student->student_code;
-                $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : $student->avatar;
-                
+
+                if ($request->hasFile('avatar')) {
+                    UploadHelper::deleteImage($student->avatar);
+                    $data['avatar'] = UploadHelper::uploadFile($request);
+                } else {
+                    $data['avatar'] = $student->avatar;
+                }
+
                 $this->update($data, $id);
                 $userData = [
                     'name' => $data['name'],
                     'email' => $student->user->email
                 ];
-                if($request->password) {
+                if ($request->password) {
                     $userData['password'] = $request->password;
                 }
-        
-                if($request->hasFile('avatar')){
-                    UploadHelper::uploadFile($request);
-                }
-        
+
                 $this->userRepo->update($userData, $data['user_id']);
             }
             DB::commit();
@@ -163,9 +163,18 @@ class StudentRepository extends BaseRepository
 
     public function updateScoreSubjectByStudentId($scores, $id)
     {
-        $student = $this->find($id);
-        foreach($scores as $subjectId => $score) {
-            $student->subjects()->updateExistingPivot($subjectId, ['score' => $score]);
+        try {
+            $student = $this->find($id);
+            $formattedScores = [];
+            
+            foreach ($scores as $subjectId => $score) {
+                $formattedScores[$subjectId] = ['score' => $score];
+            }
+
+            $student->subjects()->syncWithoutDetaching($formattedScores);
+            return true;
+        } catch (\Exception $e) {
+            return false;
         }
     }
 
@@ -179,11 +188,13 @@ class StudentRepository extends BaseRepository
     {
         try {
             DB::beginTransaction();
-            $data['avatar'] = $request->file('avatar') ? $request->file('avatar')->getClientOriginalName() : $user->student->avatar;
-            $this->update($data, $user->student->id);
             if($request->hasFile('avatar')){
-                UploadHelper::uploadFile($request);
+                UploadHelper::deleteImage($user->student->avatar);
+                $data['avatar'] = UploadHelper::uploadFile($request);
+            } else {
+                $data['avatar'] = $user->student->avatar;
             }
+            $this->update($data, $user->student->id);
             DB::commit();
             return true;
         } catch (\Exception $e) {

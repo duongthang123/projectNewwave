@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Storage;
 
 class UploadHelper
 {
@@ -9,14 +10,22 @@ class UploadHelper
     {
         if($request->hasFile('avatar')) {
             try {
-                $name = $request->file('avatar')->getClientOriginalName();
+                $name = uniqid() . time() . '.' . $request->file('avatar')->getClientOriginalExtension();
                 $pathFull = 'uploads/' . 'users';
                 $request->file('avatar')->storeAs('public/'. $pathFull. '/' . $name);
-                return '/storage/' . $pathFull . '/' . $name;
+                return $name;
             } catch (\Exception $e) {
                 toastr()->error($e->getMessage());
                 return false;
             }
+        }
+    }
+
+    public static function deleteImage($imageName)
+    {
+        $filePath = 'public/uploads/users/';
+        if ($imageName && Storage::exists($filePath . $imageName)) {
+            Storage::delete($filePath . $imageName);
         }
     }
 

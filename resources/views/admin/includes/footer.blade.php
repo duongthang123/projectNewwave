@@ -1,4 +1,3 @@
-
 <!-- jQuery -->
 <script src="{{ asset('admin/plugins/jquery/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -16,5 +15,4 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('admin/dist/js/pages/dashboard.js')}}"></script>
 <script src="{{ asset('admin/assets/js/main.js')}}"></script>
-<script src="{{ asset('admin/assets/js/checkbox-subject.js')}}"></script>
 @yield('script')

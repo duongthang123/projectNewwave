@@ -52,9 +52,10 @@ class Student extends Model
 
     public function getAvatarUrlAttribute()
     {
+        $path = 'storage/uploads/users/';
         if($this->avatar) {
-            return asset('storage/uploads/users/' . $this->avatar);
+            return asset($path . $this->avatar);
         }
-        return asset('storage/uploads/users/default-user.jpg');
+        return asset($path . 'default-user.jpg');
     }
 }

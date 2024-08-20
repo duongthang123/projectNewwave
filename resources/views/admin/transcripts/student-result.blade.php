@@ -6,7 +6,7 @@
         <h1>{{ __('message.Transcript') }}</h1>
         <div class="row mb-2">
             <div class="col-md-8 d-flex align-items-center">
-                <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 200px; border-radius: 5px" alt=""/>
+                <img src="{{ $student->avatar_url }}" id="show-image" style="max-width: 100px; max-height: 100px; border-radius: 5px" alt=""/>
                 <div class="ml-3">
                     <h4 style="font-weight: 600"> {{ $student->user->name }}</h4>
                     <div class="d-flex">
@@ -28,24 +28,12 @@
                 <div class="mt-4">
                     <p class="text-danger" style="font-size: 20px">
                         <b>
-                           {{ __('message.Average Score')}}: {{ number_format($avgScore, 2) }}
+                           {{ __('message.Average Score')}}: {{ $student->subjects->avg('pivot.score') ?? 0.0 }}
                         </b>
                     </p>
                 </div>
             </div>
         </div>
-        @hasrole('admin')
-            <div class="row mt-6 mr-2">
-                <div class="ml-auto">
-                    <a class="btn btn-warning" id="update-result-btn" style="display: none;max-width: 140px"
-                        data-toggle="modal" data-target="#modal-update-muti-result-student"
-                    >
-                        <i class="fas fa-edit"></i>
-                        {{ __('message.Update result') }}
-                    </a>
-                </div>
-            </div>
-        @endhasrole
         
         @hasrole('admin')
             <div class="row mt-6 mr-2">
@@ -62,35 +50,18 @@
         <table class="table table-hover table-bordered mt-4">
             <thead>
                 <tr>
-                    <th style="width: 50px;"></th>
                     <th style="width: 50px;">ID</th>
                     <th>{{ __('message.Subject Name') }}</th>
                     <th>{{ __('message.Score')}}</th>
-                    <th style="width: 100px">&nbsp;</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($student->subjects as $subject)
                     <tr>
-                        <td>
-                            @hasrole('admin')
-                                <input type="checkbox" class="subject-checkbox" value="{{ $subject->id }}"
-                                    data-score="{{ $subject->pivot->score }}" data-name="{{ $subject->name}}">
-                            @endhasrole
-                        </td>
                         <td> {{ $subject->id }} </td>
                         <td> {{ $subject->name }} </td>
                         <td> {{ $subject->pivot->score }} </td>
-                        <td>
-                            @hasrole('admin')
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-update-result-student-{{$subject->id}}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                @include('admin.includes.update-result-student')
-                                @include('admin.includes.update-muti-result-student')
-                            @endhasrole
-                        </td>
                 @endforeach
                         
             </tbody>
