@@ -22,9 +22,6 @@ class RoleService
         return $this->roleRepository->findRoleById($id);
     }
 
-    /**
-     * 
-     */
     public function createRole($request)
     {
         $data = $request->all();

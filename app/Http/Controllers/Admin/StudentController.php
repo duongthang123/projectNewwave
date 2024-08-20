@@ -8,7 +8,6 @@ use App\Http\Requests\Students\ImportScoreStudentRequest;
 use App\Http\Requests\Students\RegisterSubjectStudentRequest;
 use App\Http\Requests\Students\UpdateProfileStudentRequest;
 use App\Http\Requests\Students\UpdateScoreStudentRequest;
-use App\Http\Requests\Students\UpdateStudentRequest;
 use App\Imports\ScoresImport;
 use App\Repositories\Department\DepartmentRepository;
 use App\Repositories\Student\StudentRepository;
@@ -72,7 +71,6 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-
         $student = $this->studentRepo->getStudentByIdWithUser($id);
         $departments = $this->departmentRepo->getDepartmentPluck();
         return view('admin.students.show', compact('student', 'departments'));
@@ -96,14 +94,14 @@ class StudentController extends Controller
         }
 
         return response()->json([
-            'error' => false
+            'error' => true
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentRequest $request, string $id)
+    public function update(CreateStudentRequest $request, string $id)
     {
         $result = $this->studentRepo->updateStudent($request, $id);
         if($result) {
@@ -141,27 +139,21 @@ class StudentController extends Controller
     public function getStudentTranscriptById(string $id)
     {
         $student = $this->studentRepo->getStudentWithUserAndSubjectById($id);
-        $avgScore = $student->subjects->avg('pivot.score');
-        return view('admin.transcripts.student-result', compact('student', 'avgScore'));
+        return view('admin.transcripts.student-result', compact('student'));
     }
 
     /**
-     * update subject score by student_id UpdateScoreStudentRequest
+     * update subject score by student_id
      */
-    public function updateScoreSubjectByStudentId(UpdateScoreStudentRequest $request, string $id)
-    {
-        $this->studentRepo->updateScoreSubjectByStudentId($request->scores, $id);
-        toastr()->success('Update score successfully!');
-        return response()->json([
-            'error' => false,
-        ]);
-    }
-
     public function updateScoreByStudentId(UpdateScoreStudentRequest $request, string $id)
     {
-        $this->studentRepo->updateScoreSubjectByStudentId($request->scores, $id);
-        toastr()->success('Update score successfully!');
-        return redirect()->route('students.student-result', $id);
+        $result = $this->studentRepo->updateScoreSubjectByStudentId($request->scores, $id);
+        if($result) {
+            toastr()->success('Update score successfully!');
+            return redirect()->route('students.student-result', $id);
+        }
+        toastr()->error('Update score failed!');
+        return redirect()->back();
     }
 
     /**
@@ -231,6 +223,7 @@ class StudentController extends Controller
     public function editScores(string $id)
     {
         $student = $this->studentRepo->getStudentWithUserAndSubjectById($id);
-        return view('admin.students.edit-scores', compact('student'));
+        $subjects = $this->subjectRepo->getAll();
+        return view('admin.students.edit-scores', compact('student', 'subjects'));
     }
 }

@@ -77,7 +77,6 @@ Route::group(['middleware' => ['role:admin', 'auth']], function () {
         Route::delete('/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
     });
 
-    Route::put('students/transcripts/{student}', [StudentController::class, 'updateScoreSubjectByStudentId'])->name('students.update-student-result');
     Route::post('students/import-scores', [StudentController::class, 'importScores'])->name('students.import-scores');
     Route::get('students/edit-scores/{student}', [StudentController::class, 'editScores'])->name('students.edit-scores');
     Route::put('students/edit-scores/{student}', [StudentController::class, 'updateScoreByStudentId'])->name('students.update-student-scores');

@@ -16,6 +16,6 @@ class Subject extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class)->withPivot('score');
+        return $this->belongsToMany(Student::class)->withPivot('score')->withTimestamps();
     }
 }

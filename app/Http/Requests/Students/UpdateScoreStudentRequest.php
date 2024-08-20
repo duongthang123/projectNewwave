@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Students;
 
+use Illuminate\Contracts\Validation\Validator as ValidationValidator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateScoreStudentRequest extends FormRequest
@@ -36,18 +38,33 @@ class UpdateScoreStudentRequest extends FormRequest
                 $subjectValidator = Validator::make(
                     ['subject_id' => $subjectId, 'score' => $score],
                     [
-                        'subject_id' => 'required|exists:subjects,id',
+                        'subject_id' => 'required|numeric|exists:subjects,id',
                         'score' => 'required|numeric|min:0|max:10'
                     ]
                 );
 
                 if ($subjectValidator->fails()) {
                     foreach ($subjectValidator->errors()->all() as $message) {
-                        toastr()->error($message . 'Update score failed!');
                         $validator->errors()->add("scores.$subjectId", $message);
                     }
                 }
             }
         });
+    }
+
+    /**
+     * Override the failedValidation method to return JSON response.
+     */
+    protected function failedValidation(ValidationValidator $validator)
+    {
+        $errors = $validator->errors();
+        
+        toastr()->error('Update score failed!');
+        session()->flash('form_data', $this->input('scores'));
+        session()->flash('errors', $errors);
+
+        throw new HttpResponseException(
+            redirect()->back()->withErrors($errors)->withInput()
+        );
     }
 }

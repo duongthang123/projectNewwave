@@ -12,8 +12,13 @@ return [
     ],
     'PHONE_NUMBER_TYPE' => [
         'VIETTEL' => 'Viettel',
-        'MOBILEFONE' => 'Mobilfone',
+        'MOBILEFONE' => 'Mobilefone',
         'VINAPHONE' => 'Vinaphone',
+    ],
+    'PHONE_PREFIX' => [
+        'VIETTEL' => '^(098|097|096)\d{7}$',
+        'MOBILEFONE' => '^(091|094)\d{7}$',
+        'VINAPHONE' => '^(090|093)\d{7}$',
     ],
     'PER_PAGE' => [
         10 => 10,
