@@ -75,7 +75,7 @@
                         @endforeach
                     @else
                         @foreach ($student->subjects as $subject)
-                            @if ($subject->pivot->score)
+                            @if (isset($subject->pivot->score))
                                 <tr>
                                     <td>
                                         <div class="form-group">
