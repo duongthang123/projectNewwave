@@ -18,7 +18,7 @@
                                 accept="image/*">
                         </div>
                         <div class="col-md-6">
-                            <img src="" id="show-image-edit" width="200px" height="200px" alt="" />
+                            <img src="" id="show-image-edit" style="width: 150px; height: 150px;" alt="" />
                         </div>
                     </div>
                     <div class="row">

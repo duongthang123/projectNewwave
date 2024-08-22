@@ -148,12 +148,12 @@ class StudentController extends Controller
     public function updateScoreByStudentId(UpdateScoreStudentRequest $request, string $id)
     {
         $result = $this->studentRepo->updateScoreSubjectByStudentId($request->scores, $id);
-        if($result) {
-            toastr()->success('Update score successfully!');
-            return redirect()->route('students.student-result', $id);
+        if(!$result) {
+            toastr()->error('Update score failed!');
+            return redirect()->back();
         }
-        toastr()->error('Update score failed!');
-        return redirect()->back();
+        toastr()->success('Update score successfully!');
+        return redirect()->route('students.student-result', $id);
     }
 
     /**

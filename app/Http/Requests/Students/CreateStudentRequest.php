@@ -22,32 +22,23 @@ class CreateStudentRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
-            'name' => 'required|string|max:255', 
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'required|string|max:255',
             'department_id' => 'required|exists:departments,id',
             'phone' => [
                 'required',
                 'max:15',
                 'regex:/^(03|05|07|08|09)[0-9]{8}$/',
+                $this->isMethod('post') ? 'unique:students,phone' : 'unique:students,phone,' . $this->student,
             ],
-            'birthday' => 'required|date|before:today|after_or_equal:1900-01-01', 
-            'gender' => 'required|in:0,1', 
-            'address' => 'nullable|string|max:255', 
+            'birthday' => 'required|date|before:today|after_or_equal:1900-01-01',
+            'gender' => 'required|in:0,1',
+            'address' => 'nullable|string|max:255',
             'status' => 'required|in:0,1,2',
-            'password' => 'string|min:8|max:255',
-        ];  
+            'password' => ($this->isMethod('post') ? 'required|' : 'nullable|') . 'string|min:8|max:255',
+            'email' => $this->isMethod('post') ? 'required|unique:users,email|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/' : '',
+        ];
 
-        if ($this->isMethod('post')) {
-            $rules['phone'][] = 'unique:students,phone';
-            $rules['email'] = 'required|unique:users,email|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
-            $rules['password'] .= '|required';
-        }
-
-        if ($this->isMethod('put') || $this->isMethod('patch')) {
-            $rules['phone'][] = 'unique:students,phone,' . $this->student;
-            $rules['password'] .= '|nullable';
-        }
-
-        return $rules;
+        return array_filter($rules);
     }
 }

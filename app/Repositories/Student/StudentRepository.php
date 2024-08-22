@@ -88,17 +88,13 @@ class StudentRepository extends BaseRepository
             DB::beginTransaction();
             $user = $this->userRepo->create($data);
             $user->assignRole('student');
+
             $data['user_id'] = $user->id;
             $data['student_code'] = date('Y') . $user->id;
-            
-            if($request->hasFile('avatar')){
-                $data['avatar'] = UploadHelper::uploadFile($request);
-            } else {
-                $data['avatar'] = null;
-            }
-
+            $data['avatar'] = $request->hasFile('avatar') ? UploadHelper::uploadFile($request) : null;
             $this->create($data);
             SendAccountStudentMail::dispatch($data);
+            
             DB::commit();
             toastr()->success('Create student successfully!');
             return true;
@@ -163,19 +159,15 @@ class StudentRepository extends BaseRepository
 
     public function updateScoreSubjectByStudentId($scores, $id)
     {
-        try {
-            $student = $this->find($id);
-            $formattedScores = [];
-            
+        $student = $this->find($id);
+        if ($student) {
+            $data = [];
             foreach ($scores as $subjectId => $score) {
-                $formattedScores[$subjectId] = ['score' => $score];
+                $data[$subjectId] = ['score' => $score];
             }
-
-            $student->subjects()->syncWithoutDetaching($formattedScores);
-            return true;
-        } catch (\Exception $e) {
-            return false;
+            return $student->subjects()->syncWithoutDetaching($data);
         }
+        return false;
     }
 
     public function registerSubjectsUpdate($subjectIds, $id)
@@ -188,7 +180,7 @@ class StudentRepository extends BaseRepository
     {
         try {
             DB::beginTransaction();
-            if($request->hasFile('avatar')){
+            if ($request->hasFile('avatar')) {
                 UploadHelper::deleteImage($user->student->avatar);
                 $data['avatar'] = UploadHelper::uploadFile($request);
             } else {
