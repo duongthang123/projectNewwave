@@ -25,47 +25,6 @@ $(document).ready(function() {
         return selectedValues;
     }
 
-    // Update options in selected form
-    // function updateOptions() {
-    //     const selectedValues = getSelectedValues();
-        
-    //     $('select').each(function() {
-    //         const select = $(this);
-    //         let options = '<option value="">Select Subject</option>';
-
-    //         subjects.forEach(subject => {
-    //             if (!selectedValues.includes(subject.id.toString()) || select.val() === subject.id.toString()) {
-    //                 const registeredSubject = studentSubjects.find(stuSubject => stuSubject.id == subject.id);
-    //                 const score = registeredSubject ? registeredSubject.pivot.score : '';
-    //                 options += `<option value="${subject.id}" data-score="${score !== null ? score : ''}" ${select.val() === subject.id.toString() ? 'selected' : ''}>${subject.name}</option>`;
-    //             }
-    //         });
-
-    //         select.html(options);
-    //     });
-
-    //     $('select').each(function() {
-    //         const select = $(this);
-    //         const selectedSubjectId = select.val();
-    //         const inputElement = select.closest('tr').find('input');
-        
-    //         if (!selectedSubjectId) {
-    //             inputElement.val('');
-    //         } else {
-    //             const registeredSubject = studentSubjects.find(subject => subject.id == selectedSubjectId);
-    //             inputElement.attr('name', `scores[${selectedSubjectId}]`);
-    //             if (registeredSubject && registeredSubject.pivot) {
-    //                 const score = registeredSubject.pivot.score !== undefined ? registeredSubject.pivot.score : '';
-    //                 inputElement.val(score);
-    //             } else {
-    //                 inputElement.val(''); 
-    //             }
-    //         }
-    //     });
-        
-    //     toggleCreateBtn();
-    // }
-
     function updateOptions() {
         const selectedValues = getSelectedValues();
     
@@ -146,7 +105,6 @@ $(document).ready(function() {
             
             inputElement.attr('name', `scores[${selectedSubjectId}]`);
             inputElement.val(score || '');
-            // updateOptions();
         });
 
         removeButton.on('click', function() {

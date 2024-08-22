@@ -58,7 +58,7 @@ class UpdateScoreStudentRequest extends FormRequest
     protected function failedValidation(ValidationValidator $validator)
     {
         $errors = $validator->errors();
-        
+
         toastr()->error('Update score failed!');
         session()->flash('form_data', $this->input('scores'));
         session()->flash('errors', $errors);

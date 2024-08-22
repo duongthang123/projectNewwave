@@ -55,6 +55,11 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @if ($errors->has("subjects.$loop->index"))
+                                            <span class="text-danger">
+                                                {{ $errors->first("subjects.$loop->index") }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td>
@@ -87,9 +92,6 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <span class="text-danger">
-                                                {{ $errors->first("scores.$subject->id") }}
-                                            </span>
                                         </div>
                                     </td>
                                     <td>
