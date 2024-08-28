@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\RoleController;
@@ -55,6 +56,10 @@ Route::group(['middleware' => ['role:admin|student', 'auth']], function() {
     Route::get('students/transcripts/{student}', [StudentController::class, 'getStudentTranscriptById'])->name('students.student-result')->middleware('permission:show-student-result');
     Route::get('students/subjects/register/{student}', [StudentController::class, 'registerSubjects'])->name('students.register-subjects')->middleware('permission:register-subject');
     Route::put('students/subjects/register/{student}', [StudentController::class, 'registerSubjectsUpdate'])->name('students.register-subjects-update')->middleware('permission:register-subject');
+
+    // Chat
+    Route::get('chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::post('chats/message', [ChatController::class, 'messageRecieved'])->name('chats.messageRecieved');
 });
 
 // With role: student
@@ -82,4 +87,5 @@ Route::group(['middleware' => ['role:admin', 'auth']], function () {
     Route::put('students/edit-scores/{student}', [StudentController::class, 'updateScoreByStudentId'])->name('students.update-student-scores');
 
     Route::resource('students', StudentController::class);
+
 });

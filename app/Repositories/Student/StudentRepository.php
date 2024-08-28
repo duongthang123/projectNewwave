@@ -165,7 +165,7 @@ class StudentRepository extends BaseRepository
             foreach ($scores as $subjectId => $score) {
                 $data[$subjectId] = ['score' => $score];
             }
-            return $student->subjects()->syncWithoutDetaching($data);
+            return $student->subjects()->sync($data);
         }
         return false;
     }

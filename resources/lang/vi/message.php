@@ -97,6 +97,7 @@ return [
     'My Profile' => 'Thông tin của tôi',
 
     'Transcript' => 'Bảng điểm',
+    'Chat' => 'Trò chuyện',
     'Are you sure resgiter' => 'Bạn có chắc chắn muốn đăng ký',
     'Close' => 'Đóng',
     'Logout' => 'Đăng xuất',

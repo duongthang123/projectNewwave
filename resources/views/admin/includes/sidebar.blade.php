@@ -146,11 +146,11 @@
         {{-- Subject --}}
         <li class="nav-item {{request()->routeIs('subjects.*') ? 'menu-open' : ''}}">
             <a href="#" class="nav-link {{request()->routeIs('subjects.*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>
-                {{ __('message.Subject') }}
-                <i class="right fas fa-angle-left"></i>
-            </p>
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    {{ __('message.Subject') }}
+                    <i class="right fas fa-angle-left"></i>
+                </p>
             </a>
             <ul class="nav nav-treeview">
             <li class="nav-item">
@@ -168,6 +168,16 @@
                 </li>
             @endcan
             </ul>
+        </li>
+
+        {{-- Chat --}}
+        <li class="nav-item {{request()->routeIs('chats.*') ? 'menu-open' : ''}}">
+            <a href="{{ route('chats.index')}}" class="nav-link {{request()->routeIs('chats.*') ? 'active' : ''}}">
+                <i class="nav-icon fab fa-rocketchat"></i>
+                <p>
+                    {{ __('message.Chat') }}
+                </p>
+            </a>
         </li>
         {{-- Logout --}}
         <li class="nav-item">

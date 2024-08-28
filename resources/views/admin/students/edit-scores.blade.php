@@ -80,36 +80,34 @@
                         @endforeach
                     @else
                         @foreach ($student->subjects as $subject)
-                            @if (isset($subject->pivot->score))
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <select class="custom-select subject-select">
-                                                @foreach ($subjects as $item)
-                                                    <option value="{{ $item->id }}" 
-                                                        {{ $item->id === $subject->id ? 'selected' : '' }}>
-                                                        {{ $item->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="scores[{{ $subject->id }}]" 
-                                                value="{{ $subject->pivot->score }}" placeholder="Score">
-                                            <span class="text-danger">
-                                                {{ $errors->first("scores.$subject->id") }}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-remove">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endif
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="custom-select subject-select">
+                                            @foreach ($subjects as $item)
+                                                <option value="{{ $item->id }}" 
+                                                    {{ $item->id === $subject->id ? 'selected' : '' }}>
+                                                    {{ $item->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="scores[{{ $subject->id }}]" 
+                                            value="{{ $subject->pivot->score }}" placeholder="Score">
+                                        <span class="text-danger">
+                                            {{ $errors->first("scores.$subject->id") }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-remove">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         @endforeach
                     @endif
                 </tbody>

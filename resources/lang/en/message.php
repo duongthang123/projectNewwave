@@ -97,6 +97,7 @@ return [
     'My Profile' => 'My Profile',
 
     'Transcript' => 'Transcript',
+    'Chat' => 'Chat',
     'Are you sure resgiter' => 'Are you sure resgiter',
     'Close' => 'Close',
     'Logout' => 'Logout',

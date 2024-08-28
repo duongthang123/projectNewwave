@@ -1,3 +1,7 @@
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+</aside>
+
 <!-- jQuery -->
 <script src="{{ asset('admin/plugins/jquery/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->

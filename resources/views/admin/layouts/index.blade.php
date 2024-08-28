@@ -7,7 +7,15 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
   @include('admin.includes.head')
-
+  @vite(['resources/js/app.js'])
+  <style>
+    .alert-fixed-top-right {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050; /* Sử dụng một giá trị z-index lớn hơn giá trị của modal */
+    }
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -33,9 +41,12 @@
     @yield('content')
   </div>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-  </aside>
+	<div class="container mt-3">
+		<div id="notification" class="alert alert-success alert-dismissible fade alert-fixed-top-right invisible">
+
+		</div>
+	</div>
+
 </div>
 <!-- ./wrapper -->
 
