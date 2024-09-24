@@ -82,6 +82,7 @@ return [
     'Update result' => 'Update result',
 
     'Import Score' => 'Import Score',
+    'Export' => 'Export',
     'Study Result' => 'Study Result',
     'Register Subjects' => 'Register Subject',
     'Update Scores' => 'Update Scores',

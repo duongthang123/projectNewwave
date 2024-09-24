@@ -29,7 +29,7 @@ class StudentRepository extends BaseRepository
     {
         $students = $this->model::select('id', 'user_id', 'student_code', 'status', 'phone', 'gender', 'birthday')
                                 ->with('user:id,name', 'subjects:id');
-                                
+
         if(isset($request['age_from'])) {
             $ageFromDate = Carbon::now()->subYears($request['age_from'])->startOfDay()->format('Y-m-d');
             $students->where('birthday', '<=', $ageFromDate);
@@ -44,7 +44,7 @@ class StudentRepository extends BaseRepository
             $students->whereHas('subjects', function ($query) use ($request) {
                 $query->select('student_subject.student_id', DB::raw('AVG(student_subject.score) as avg_score'))
                       ->groupBy('student_subject.student_id');
-    
+
                 if (isset($request['score_from'])) {
                     $query->havingRaw('AVG(student_subject.score) >= ?', [$request['score_from']]);
                 }
@@ -54,6 +54,18 @@ class StudentRepository extends BaseRepository
             });
         }
 
+        // if (!empty($request['phone_types']) && array_filter($request['phone_types'])) {
+        //     $phonePrefixes = array_map(function($type) {
+        //         return config('const.PHONE_PREFIX.' . strtoupper($type));
+        //     }, array_filter($request['phone_types']));
+        //     if (!empty($phonePrefixes)) {
+        //         $students->where(function($query) use ($phonePrefixes) {
+        //             $regexPattern = implode('|', $phonePrefixes);
+        //             $query->where('phone', 'regexp', $regexPattern);
+        //         });
+        //     }
+        // }
+
         if (!empty($request['phone_types']) && array_filter($request['phone_types'])) {
             $phonePrefixes = array_map(function($type) {
                 return config('const.PHONE_PREFIX.' . strtoupper($type));
@@ -61,8 +73,9 @@ class StudentRepository extends BaseRepository
 
             if (!empty($phonePrefixes)) {
                 $students->where(function($query) use ($phonePrefixes) {
-                    $regexPattern = implode('|', $phonePrefixes);
-                    $query->where('phone', 'regexp', $regexPattern);
+                    foreach ($phonePrefixes as $prefix) {
+                        $query->orWhere('phone', 'regexp', $prefix);
+                    }
                 });
             }
         }
@@ -94,7 +107,7 @@ class StudentRepository extends BaseRepository
             $data['avatar'] = $request->hasFile('avatar') ? UploadHelper::uploadFile($request) : null;
             $this->create($data);
             SendAccountStudentMail::dispatch($data);
-            
+
             DB::commit();
             toastr()->success('Create student successfully!');
             return true;

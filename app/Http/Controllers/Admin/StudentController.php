@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Students\CreateStudentRequest;
 use App\Http\Requests\Students\ImportScoreStudentRequest;
@@ -16,6 +17,7 @@ use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
+use Maatwebsite\Excel\Excel as ExcelExcel;
 
 class StudentController extends Controller
 {
@@ -25,8 +27,8 @@ class StudentController extends Controller
     protected $subjectRepo;
 
     public function __construct (
-        StudentRepository $studentRepo, 
-        DepartmentRepository $departmentRepo, 
+        StudentRepository $studentRepo,
+        DepartmentRepository $departmentRepo,
         UserRepository $userRepo,
         SubjectRepository $subjectRepo
     ){
@@ -225,5 +227,13 @@ class StudentController extends Controller
         $student = $this->studentRepo->getStudentWithUserAndSubjectById($id);
         $subjects = $this->subjectRepo->getAll();
         return view('admin.students.edit-scores', compact('student', 'subjects'));
+    }
+
+    /**
+     * exprot student code with excel file
+     */
+    public function exportScores()
+    {
+        return (new StudentsExport)->download('invoices.xlsx', ExcelExcel::XLSX);
     }
 }

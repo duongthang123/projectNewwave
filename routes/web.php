@@ -85,6 +85,7 @@ Route::group(['middleware' => ['role:admin', 'auth']], function () {
     Route::post('students/import-scores', [StudentController::class, 'importScores'])->name('students.import-scores');
     Route::get('students/edit-scores/{student}', [StudentController::class, 'editScores'])->name('students.edit-scores');
     Route::put('students/edit-scores/{student}', [StudentController::class, 'updateScoreByStudentId'])->name('students.update-student-scores');
+    Route::get('students/export-scores', [StudentController::class, 'exportScores'])->name('students.export-scores');
 
     Route::resource('students', StudentController::class);
 

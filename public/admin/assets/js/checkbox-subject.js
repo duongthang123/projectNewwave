@@ -3,11 +3,10 @@ $(document).ready(function () {
     const btnRegisterSubjectShow = $('#update-register-subject-btn');
     const checkAll = $('#check-all-register-subject');
 
-    console.log(registerSubjectCheckboxs);
     if(registerSubjectCheckboxs.length == 0) {
         checkAll.hide();
     }
-    
+
     checkAll.on('change', function () {
         const isChecked = checkAll.prop('checked');
         registerSubjectCheckboxs.prop('checked', isChecked);

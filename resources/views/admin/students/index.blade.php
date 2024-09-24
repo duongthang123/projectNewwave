@@ -10,6 +10,10 @@
                 <i class="fas fa-upload mr-2"></i>
                 {{ __('message.Import Score') }}
             </button>
+            <a href="{{ route('students.export-scores') }}" class="btn btn-success ml-2">
+                <i class="fas fa-file-excel mr-2"></i>
+                {{ __('message.Export') }}
+            </a>
         </div>
 
         {{ Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'mb-4']) }}

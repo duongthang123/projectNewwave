@@ -82,6 +82,7 @@ return [
 
     'Transcript' => 'Bảng điểm',
     'Import Score' => 'Nhập file điểm',
+    'Export' => 'Xuất file',
     'Study Result' => 'Kết quả học tập',
     'Register Subjects' => 'Đăng ký môn học',
     'Update Scores' => 'Cập nhật điểm số',

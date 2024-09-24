@@ -27,18 +27,20 @@ class ScoresImport implements ToCollection, WithHeadingRow, WithValidation, With
         $subjects = Subject::whereIn('id', $subjectIds)->get()->keyBy('id');
         $dataUpdate = [];
         $errors = [];
+        $line = 0;
 
         foreach ($rows as $row) 
-        { 
+        {   
+            $line++;
             $student = $students->get($row['student_code']);
             $subject = $subjects->get($row['subject_id']);
 
             if(!$student) {
-                $errors[] = "Student code '{$row['student_code']}' does not exist";
+                $errors[] = "Line '{$line}' Student code '{$row['student_code']}' does not exist";
             }
 
             if(!$subject) {
-                $errors[] = "Subject_id '{$row['subject_id']}' does not exist";
+                $errors[] = "Line '{$line}' Subject_id '{$row['subject_id']}' does not exist";
             }
 
             if ($student && $subject) {
@@ -73,6 +75,6 @@ class ScoresImport implements ToCollection, WithHeadingRow, WithValidation, With
 
     public function chunkSize(): int
     {
-        return 100;
+        return 900;
     }
 }
